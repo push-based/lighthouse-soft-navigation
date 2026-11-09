@@ -1,5 +1,11 @@
 import { execSync } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -47,5 +53,13 @@ describe(PACKAGE, () => {
       { cwd: projectDirectory, encoding: 'utf8' },
     );
     expect(JSON.parse(exports).length).toBeGreaterThan(0);
+  });
+
+  it('ships type declarations', () => {
+    const packageRoot = join(projectDirectory, 'node_modules', PACKAGE);
+    const { types } = JSON.parse(
+      readFileSync(join(packageRoot, 'package.json'), 'utf8'),
+    );
+    expect(existsSync(join(packageRoot, types))).toBe(true);
   });
 });

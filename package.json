@@ -5,24 +5,22 @@
   "scripts": {},
   "private": true,
   "devDependencies": {
-    "@eslint/js": "^9.8.0",
-    "@nx/eslint": "^24.0.0",
-    "@nx/eslint-plugin": "24.0.0",
     "@nx/js": "24.0.0",
+    "@nx/oxlint": "^24.0.0",
+    "@nx/rolldown": "^24.0.0",
     "@nx/vitest": "^24.0.0",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
     "@types/node": "^24.0.0",
     "@vitest/coverage-v8": "~5.0.1",
-    "eslint": "^9.8.0",
-    "eslint-config-prettier": "^10.0.0",
-    "jsonc-eslint-parser": "^2.1.0",
     "nx": "24.0.0",
+    "oxlint": "^1.75.0",
     "prettier": "^3.8.1",
+    "rolldown": "^1.2.0",
+    "rolldown-plugin-dts": "^0.30.0",
     "tslib": "^2.3.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.58.0",
     "verdaccio": "^6.3.2",
     "vite": "^8.0.0",
     "vitest": "~5.0.1"
@@ -31,7 +29,6 @@
     "packages/*"
   ],
   "packageManager": "npm@11.20.0",
-  "dependencies": {},
   "nx": {
     "includedScripts": [],
     "targets": {

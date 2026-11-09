@@ -20,9 +20,6 @@
   "nx": {
     "name": "lighthouse-soft-navigation"
   },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
   "description": "Soft navigation metrics (FCP/LCP) for Lighthouse user flows",
   "license": "MIT",
   "repository": {
