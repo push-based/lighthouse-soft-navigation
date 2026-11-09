@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/lighthouse-soft-navigation"
+    },
+    {
+      "path": "./packages/lighthouse-soft-navigation-e2e"
+    }
+  ],
+  "compilerOptions": {}
+}
