@@ -27,7 +27,6 @@ jobs:
 
       - run: npm ci
 
-      # Tasks run on this runner instead of Nx Cloud agents: distribution needs the repository to be
-      # connected to Nx Cloud, and the e2e suite drives Chrome, which the runner has the libraries for.
+      # The e2e suite drives Chrome, which the runner has the libraries for.
       - run: npx nx format:check --base="remotes/origin/main"
       - run: npx nx run-many -t lint test build typecheck e2e
