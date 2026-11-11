@@ -1,43 +1,12 @@
 import { execSync } from 'node:child_process';
-import {
-  existsSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
-import { tmpdir } from 'node:os';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { inject } from 'vitest';
 
 const PACKAGE = '@push-based/lighthouse-soft-navigation';
 
 describe(PACKAGE, () => {
-  let projectDirectory: string;
-
-  beforeAll(() => {
-    projectDirectory = mkdtempSync(
-      join(tmpdir(), 'lighthouse-soft-navigation-e2e-'),
-    );
-    writeFileSync(
-      join(projectDirectory, 'package.json'),
-      JSON.stringify({
-        name: 'consumer',
-        version: '0.0.0',
-        private: true,
-        type: 'module',
-      }),
-    );
-    // startLocalRegistry points npm_config_registry at Verdaccio for this process.
-    execSync(`npm install ${PACKAGE}@e2e`, {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-      env: process.env,
-    });
-  });
-
-  afterAll(() => {
-    rmSync(projectDirectory, { recursive: true, force: true });
-  });
+  const projectDirectory = inject('consumerDirectory');
 
   it('is installed from the local registry', () => {
     const version = execSync(`npm ls ${PACKAGE} --json`, {
@@ -52,7 +21,7 @@ describe(PACKAGE, () => {
       `node --input-type=module -e "import * as m from '${PACKAGE}'; console.log(JSON.stringify(Object.keys(m)))"`,
       { cwd: projectDirectory, encoding: 'utf8' },
     );
-    expect(JSON.parse(exports).length).toBeGreaterThan(0);
+    expect(JSON.parse(exports)).toContain('softNavigationConfig');
   });
 
   it('ships type declarations', () => {
