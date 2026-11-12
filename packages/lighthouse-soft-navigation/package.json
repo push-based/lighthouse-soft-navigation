@@ -17,10 +17,13 @@
     "dist",
     "!**/*.tsbuildinfo"
   ],
+  "peerDependencies": {
+    "lighthouse": "^13.6.0"
+  },
   "nx": {
     "name": "lighthouse-soft-navigation"
   },
-  "description": "Soft navigation metrics (FCP/LCP) for Lighthouse user flows",
+  "description": "Measure soft navigations as navigation steps of a Lighthouse user flow",
   "license": "MIT",
   "repository": {
     "type": "git",
