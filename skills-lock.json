@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "clarity": {
+      "source": "addyosmani/clarity",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "a6a0bceb9dd289960d504620bb977020ee179e356766d984fbc9555d99836376",
+      "installMode": "copy"
+    }
+  }
+}
