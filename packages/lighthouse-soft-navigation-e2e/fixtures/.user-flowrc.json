@@ -1,0 +1,10 @@
+{
+  "collect": {
+    "ufPath": "./user-flows"
+  },
+  "persist": {
+    "outPath": "./user-flow-reports",
+    "format": ["json", "md"],
+    "openReport": false
+  }
+}
