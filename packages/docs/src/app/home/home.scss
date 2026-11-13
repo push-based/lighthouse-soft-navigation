@@ -120,14 +120,6 @@
   margin: 0;
   max-width: 40rem;
   box-shadow: var(--shadow-md);
-
-  .terminal-replay {
-    margin-left: auto;
-  }
-
-  .terminal-replay + .code-copy {
-    margin-left: 0;
-  }
 }
 
 /* The package pill: a live dot, the name and the version on npm. */
@@ -271,95 +263,6 @@
   margin: 0 var(--space-1) 0 0;
 }
 
-/* Terminal output lines appear once their command has typed. */
-.term-prompt {
-  color: var(--color-primary-400);
-  user-select: none;
-}
-
-.type-out {
-  display: inline-block;
-  opacity: 0;
-  animation: fade-up var(--duration-base) ease-out both;
-  animation-delay: var(--start);
-}
-
-.type-out-spinner {
-  animation:
-    fade-up var(--duration-base) ease-out both,
-    hide 1ms linear forwards;
-  animation-delay: var(--start), var(--end);
-}
-
-.term-ok {
-  color: var(--color-success-300);
-}
-
-.term-dim {
-  color: var(--color-neutral-400);
-}
-
-.term-spinner {
-  display: inline-block;
-  width: 0.9em;
-  height: 0.9em;
-  margin-right: 0.3ch;
-  vertical-align: -0.1em;
-  border-radius: 50%;
-  border: 2px solid var(--color-neutral-600);
-  border-top-color: var(--color-primary-300);
-  animation: spin 0.8s linear infinite;
-}
-
-.term-cursor {
-  display: inline-block;
-  width: 0.55ch;
-  height: 1.1em;
-  vertical-align: -0.2em;
-  background: var(--color-neutral-300);
-  animation: cursor-blink 1s step-end infinite;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes hide {
-  to {
-    display: none;
-    opacity: 0;
-  }
-}
-
-@keyframes spin {
-  to {
-    rotate: 360deg;
-  }
-}
-
-@keyframes cursor-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-/* On narrow screens the long result line wraps instead of scrolling off. */
-@media (max-width: 639px) {
-  .term-ok {
-    white-space: normal;
-  }
-}
-
 .sections {
   padding: var(--space-20) 0 0;
 }
@@ -406,19 +309,8 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-blob,
   .hero-pill-dot,
-  .word-inner,
-  .type-out,
-  .term-spinner,
-  .term-cursor {
+  .word-inner {
     animation: none;
-  }
-
-  .type-out {
-    opacity: 1;
-  }
-
-  .type-out-spinner {
-    display: none;
   }
 
   .word-accent {

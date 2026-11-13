@@ -75,37 +75,16 @@
     <docs-hero-scene />
   </div>
 
-  <figure class="hero-code code-terminal enter" style="--enter: 6">
+  <figure class="hero-code enter" style="--enter: 6">
     <figcaption class="code-title">
-      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span>Terminal</span>
-      <button
-        class="terminal-replay"
-        type="button"
-        (click)="replay()"
-        aria-label="Replay"
-        title="Replay"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
-          <path d="M3 3v5h5" />
-        </svg>
-      </button>
+      <span>flow.mjs</span>
       <button
         class="code-copy"
         type="button"
         [class.copied]="copied()"
-        (click)="copyInstall()"
-        aria-label="Copy the install command"
-        title="Copy the install command"
+        (click)="copySnippet()"
+        aria-label="Copy the code"
+        title="Copy the code"
       >
         <svg
           class="icon-copy"
@@ -135,16 +114,15 @@
         <span class="code-copy-label" aria-hidden="true">Copied</span>
       </button>
     </figcaption>
-    <!-- Each command types itself out once; the server renders them in full.
-         Replaying re-creates the block so the animations run again. -->
-    @for (run of [runs()]; track run) {
-    <pre><code><span class="term-comment"># install and run a flow with a soft navigation</span>
-@for (line of commands; track line.text) {<span class="term-prompt">$ </span><span class="type-line" [style.--chars]="line.chars" [style.--start]="line.start + 'ms'">{{ line.text }}</span>
-}<span class="term-out type-out type-out-spinner" [style.--start]="outputStart + 'ms'" [style.--end]="outputStart + 1500 + 'ms'"><i class="term-spinner" aria-hidden="true"></i> running the flow</span><span class="term-out term-ok type-out" [style.--start]="outputStart + 1500 + 'ms'">✔ shop.example/ <span class="term-dim">· page load · performance 88</span></span>
-<span class="term-out term-ok type-out" [style.--start]="outputStart + 1800 + 'ms'">✔ shop.example/products <span class="term-dim">· soft navigation · performance 97</span></span>
-<span class="term-out type-out" [style.--start]="outputStart + 2200 + 'ms'">→ flow.report.html</span>
-<span class="term-prompt type-out" [style.--start]="outputStart + 2700 + 'ms'">$ <i class="term-cursor" aria-hidden="true"></i></span></code></pre>
-    }
+    <!-- prettier-ignore -->
+    <pre><code><span class="hljs-keyword">import</span> &#123; softNavigationConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'&#64;push-based/lighthouse-soft-navigation'</span>;
+
+<span class="hljs-keyword">const</span> flow = <span class="hljs-keyword">await</span> <span class="hljs-title function_">startFlow</span>(page, &#123; <span class="hljs-attr">config</span>: <span class="hljs-title function_">softNavigationConfig</span>() &#125;);
+
+<span class="hljs-comment">// A click that only changes the route is a navigation step.</span>
+<span class="hljs-keyword">await</span> flow.<span class="hljs-title function_">navigate</span>(() =&gt; page.<span class="hljs-title function_">click</span>(<span class="hljs-string">'a.product-link'</span>), &#123;
+  <span class="hljs-attr">throttlingMethod</span>: <span class="hljs-string">'devtools'</span>,
+&#125;);</code></pre>
   </figure>
 </section>
 

@@ -1,21 +1,16 @@
 // Renders public/og-image.png (1200×630), the preview card for links to the
-// docs, from an HTML version of the landing page hero, and the favicon and
-// touch icon from the mark. Run it after changing the hero's look or the mark:
+// docs, from an HTML version of the landing page hero. Run it after changing
+// the hero's look:
 //
 //   node packages/docs/scripts/og-image.mjs
 //
 // It needs the repository's puppeteer and fetches the Geist fonts.
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { launch } from 'puppeteer';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const mark = await readFile(join(root, 'public/images/mark.svg'), 'utf8');
-const symbol = mark.replace(
-  /<svg[^>]*>/,
-  '<svg width="0" height="0" style="position:absolute">',
-);
 
 const metrics = [
   ['FCP', '0.4 s'],
@@ -62,7 +57,6 @@ const html = `<!doctype html>
   .metric.score b { color: #fff; }
 </style></head>
 <body>
-${symbol}
 <div class="grid"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
@@ -91,21 +85,5 @@ await page.evaluate(() => document.fonts.ready);
 const png = await page.screenshot({ type: 'png' });
 await writeFile(join(root, 'public/og-image.png'), png);
 console.log('wrote public/og-image.png');
-
-// The favicon and the touch icon: the mark on a light tile.
-for (const [file, size, pad] of [
-  ['favicon.png', 64, 0],
-  ['apple-touch-icon.png', 180, 20],
-]) {
-  await page.setViewport({ width: size, height: size, deviceScaleFactor: 1 });
-  await page.setContent(
-    `<body style="margin:0;background:${pad ? '#fff' : 'transparent'}">${symbol}<svg viewBox="0 0 1360 1360" style="display:block;margin:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px;stroke:#0d121c;color:#fff"><use href="#mark"/></svg></body>`,
-  );
-  await writeFile(
-    join(root, 'public', file),
-    await page.screenshot({ type: 'png', omitBackground: !pad }),
-  );
-  console.log(`wrote public/${file}`);
-}
 
 await browser.close();

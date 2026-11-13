@@ -30,9 +30,9 @@ const POPULAR = [
     <section class="not-found">
       <div class="copy">
         <p class="text-subtitle eyebrow enter" style="--enter: 0">
-          404 · No navigation detected
+          404 · Signal lost
         </p>
-        <h1 class="enter" style="--enter: 1">This route never painted</h1>
+        <h1 class="enter" style="--enter: 1">This page drifted out of orbit</h1>
         <p class="lead enter" style="--enter: 2">
           The link may be outdated or mistyped. Search the docs, or pick up from
           one of the pages most people are looking for.
@@ -75,19 +75,22 @@ const POPULAR = [
         </ul>
       </div>
 
-      <!-- The lighthouse sweeps its beam across the sky, looking for the page. -->
+      <!-- The UFO sweeps its beam across the ground, looking for the page. -->
       <div class="scene enter" style="--enter: 2" aria-hidden="true">
         <span class="star" style="--x: 12%; --y: 18%; --d: 0s"></span>
         <span class="star" style="--x: 78%; --y: 10%; --d: 0.8s"></span>
         <span class="star" style="--x: 88%; --y: 46%; --d: 1.6s"></span>
-        <span class="star" style="--x: 42%; --y: 30%; --d: 2.2s"></span>
+        <span class="star" style="--x: 22%; --y: 58%; --d: 2.2s"></span>
         <span class="star" style="--x: 55%; --y: 6%; --d: 1.2s"></span>
-        <div class="beam"></div>
-        <svg class="brand-mark keeper" viewBox="0 0 1360 1360">
-          <use href="images/mark.svg#mark" />
-        </svg>
-        <span class="lost">404</span>
-        <div class="ground"></div>
+        <div class="ufo">
+          <svg class="brand-mark ufo-mark" viewBox="0 0 1360 1360">
+            <use href="images/mark.svg#mark" />
+          </svg>
+          <div class="beam"></div>
+        </div>
+        <div class="ground">
+          <span class="lost">404</span>
+        </div>
       </div>
     </section>
   `,
@@ -230,30 +233,38 @@ const POPULAR = [
       animation: twinkle 3s ease-in-out var(--d) infinite;
     }
 
-    .keeper {
+    .ufo {
       position: absolute;
-      left: 22%;
-      bottom: 46px;
-      z-index: 1;
-      width: 120px;
-      height: 120px;
-      margin-left: -60px;
+      top: 28px;
+      left: 50%;
+      width: 96px;
+      margin-left: -48px;
+      animation: hover 5s ease-in-out infinite;
     }
 
-    /* From the lamp, which sits 124px above the bottom of the scene. */
+    .ufo-mark {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 96px;
+      height: 96px;
+      animation: bob 2.4s ease-in-out infinite;
+    }
+
     .beam {
       position: absolute;
-      left: 22%;
-      bottom: 64px;
-      width: 75%;
-      height: 120px;
+      top: 70px;
+      left: 50%;
+      width: 150px;
+      height: 190px;
+      margin-left: -75px;
       background: linear-gradient(
-        to right,
-        color-mix(in srgb, #ffd166 70%, transparent),
+        to bottom,
+        color-mix(in srgb, var(--accent) 45%, transparent),
         transparent
       );
-      clip-path: polygon(0 46%, 100% 0, 100% 100%, 0 54%);
-      transform-origin: 0 50%;
+      clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+      transform-origin: top center;
       animation: sweep 5s ease-in-out infinite;
     }
 
@@ -264,27 +275,44 @@ const POPULAR = [
       bottom: 0;
       height: 56px;
       border-top: 1px dashed var(--border-strong);
+      display: grid;
+      place-items: center;
     }
 
     .lost {
-      position: absolute;
-      right: 14%;
-      top: 22%;
       font-family: var(--font-mono);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.3em;
       color: var(--text-subtle);
       animation: flicker 5s ease-in-out infinite;
     }
 
+    @keyframes bob {
+      50% {
+        translate: 0 -6px;
+      }
+    }
+
+    @keyframes hover {
+      0%,
+      100% {
+        translate: -40px 0;
+        rotate: -4deg;
+      }
+      50% {
+        translate: 40px 0;
+        rotate: 4deg;
+      }
+    }
+
     @keyframes sweep {
       0%,
       100% {
-        rotate: 6deg;
+        rotate: 10deg;
       }
       50% {
-        rotate: -26deg;
+        rotate: -10deg;
       }
     }
 

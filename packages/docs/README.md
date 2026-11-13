@@ -34,9 +34,11 @@ Markdown extras:
 
 The site follows the system colour scheme and offers a toggle in the header; the choice is stored in `localStorage`. Colours come from the push-based design tokens in `src/tokens.scss`, mapped to semantic roles with light and dark values in `src/styles.scss`. Use the semantic roles (`--surface`, `--text`, `--border`, `--accent`, ...) in components, never the raw `--color-*` ramps.
 
-## Preview image and icons
+## Preview image
 
-`node packages/docs/scripts/og-image.mjs` renders `public/og-image.png`, `public/favicon.png` and `public/apple-touch-icon.png` from the hero and `public/images/mark.svg`. Run it after changing either.
+`node packages/docs/scripts/og-image.mjs` renders `public/og-image.png` from an HTML version of the landing page hero. Run it after changing the hero's look.
+
+The mark in `public/images/mark.svg`, the favicon and the touch icon are the user-flow ones.
 
 ## Deploy
 

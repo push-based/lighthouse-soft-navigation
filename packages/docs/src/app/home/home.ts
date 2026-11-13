@@ -12,15 +12,16 @@ import { Reveal } from '../shared/reveal';
 import { Tilt } from '../shared/tilt';
 import { PACKAGE_VERSION } from '../../content/version.generated';
 
-/** Typing speed of the hero terminal, per character, and the pause between commands. */
-const CHAR_MS = 34;
-const GAP_MS = 420;
-const FIRST_COMMAND_MS = 900;
+/** The code in the hero, as the copy button hands it out. */
+const SNIPPET = `import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
-const COMMANDS = [
-  'npm i @push-based/lighthouse-soft-navigation',
-  'node flow.mjs',
-];
+const flow = await startFlow(page, { config: softNavigationConfig() });
+
+// A click that only changes the route is a navigation step.
+await flow.navigate(() => page.click('a.product-link'), {
+  throttlingMethod: 'devtools',
+});
+`;
 
 @Component({
   selector: 'docs-home',
@@ -32,7 +33,6 @@ const COMMANDS = [
 export class Home {
   readonly pages = ALL_DOC_PAGES;
   readonly version = PACKAGE_VERSION;
-  readonly install = COMMANDS[0];
 
   /** The headline, one word at a time so each can rise into place. */
   readonly titleWords = [
@@ -43,31 +43,7 @@ export class Home {
     { text: 'navigations.', accent: true },
   ];
 
-  /** The hero terminal: each command types itself out after the previous one. */
-  readonly commands = (() => {
-    const lines: { text: string; chars: number; start: number }[] = [];
-    let start = FIRST_COMMAND_MS;
-    for (const text of COMMANDS) {
-      lines.push({ text, chars: text.length, start });
-      start += text.length * CHAR_MS + GAP_MS;
-    }
-    return lines;
-  })();
-
-  /** When the last command has been typed and its output can begin. */
-  readonly outputStart = (() => {
-    const last = this.commands[this.commands.length - 1];
-    return last.start + last.chars * CHAR_MS + 500;
-  })();
-
   readonly copied = signal(false);
-
-  /** Bumped by the replay button; the terminal re-renders and types again. */
-  readonly runs = signal(0);
-
-  replay() {
-    this.runs.update((n) => n + 1);
-  }
 
   constructor() {
     const title =
@@ -81,13 +57,13 @@ export class Home {
     meta.updateTag({ property: 'og:description', content: description });
   }
 
-  async copyInstall() {
+  async copySnippet() {
     try {
-      await navigator.clipboard.writeText(this.install);
+      await navigator.clipboard.writeText(SNIPPET);
       this.copied.set(true);
       setTimeout(() => this.copied.set(false), 1800);
     } catch {
-      // Clipboard access can be denied; the command stays selectable.
+      // Clipboard access can be denied; the code stays selectable.
     }
   }
 }
