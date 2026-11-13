@@ -7,3 +7,10 @@ allowBuilds:
   nx: true
   # The e2e setup downloads Chrome for its consumer project, so the workspace install skips it.
   puppeteer: false
+  # Comes with @push-based/user-flow through tsx. The workspace only takes the user-flow version from
+  # it; the e2e consumer project installs user-flow on its own.
+  esbuild: false
+
+# Released less than a day before the e2e suite moved to it; the exclusion can go once it is older.
+minimumReleaseAgeExclude:
+  - '@push-based/user-flow@0.21.6'

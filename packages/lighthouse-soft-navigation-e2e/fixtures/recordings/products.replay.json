@@ -1,0 +1,16 @@
+{
+  "title": "Open the products",
+  "steps": [
+    {
+      "type": "startNavigation",
+      "stepOptions": { "throttlingMethod": "devtools" }
+    },
+    {
+      "type": "click",
+      "selectors": [["#products-link"]],
+      "offsetX": 5,
+      "offsetY": 5
+    },
+    { "type": "endNavigation" }
+  ]
+}
