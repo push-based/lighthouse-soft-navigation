@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
-import { DOCS_NAV, SECTION_ICONS } from '../docs/nav';
+import { ALL_DOC_PAGES } from '../docs/nav';
 import { HeroScene } from './hero-scene';
 import { Reveal } from '../shared/reveal';
 import { Tilt } from '../shared/tilt';
@@ -30,8 +30,7 @@ const COMMANDS = [
   styleUrl: './home.scss',
 })
 export class Home {
-  readonly sections = DOCS_NAV;
-  readonly sectionIcons = SECTION_ICONS;
+  readonly pages = ALL_DOC_PAGES;
   readonly version = PACKAGE_VERSION;
   readonly install = COMMANDS[0];
 

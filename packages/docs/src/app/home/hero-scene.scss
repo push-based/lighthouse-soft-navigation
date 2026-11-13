@@ -39,7 +39,7 @@ $cycle: 8s;
 .bar {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   padding: var(--space-2-5) var(--space-3);
   border-bottom: 1px solid var(--border);
   background: var(--surface-subtle);
@@ -69,6 +69,12 @@ $cycle: 8s;
   font-size: 0.75rem;
   line-height: 1.125rem;
   color: var(--text-muted);
+  overflow: hidden;
+  white-space: nowrap;
+
+  @media (max-width: 479px) {
+    font-size: 0.6875rem;
+  }
 }
 
 .host {

@@ -1,17 +1,21 @@
 ## Install
 
 ```sh
-npm install @push-based/lighthouse-soft-navigation lighthouse
+npm install @push-based/lighthouse-soft-navigation lighthouse puppeteer
 ```
 
 ## Measure a soft navigation
 
 Pass `softNavigationConfig()` to `startFlow`, then trigger the route change in a navigation step:
 
-```js
+```js title="flow.mjs"
+import { writeFileSync } from 'node:fs';
 import { startFlow } from 'lighthouse';
+import puppeteer from 'puppeteer';
 import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
+const browser = await puppeteer.launch();
+const page = await browser.newPage();
 const flow = await startFlow(page, { config: softNavigationConfig() });
 
 // A page load, measured by stock Lighthouse.
@@ -26,7 +30,12 @@ await flow.navigate(() => page.click('a.product-link'), {
 await flow.startNavigation({ throttlingMethod: 'devtools' });
 await page.click('a.checkout-link');
 await flow.endNavigation();
+
+writeFileSync('flow.report.html', await flow.generateReport());
+await browser.close();
 ```
+
+Run it with `node flow.mjs` and open `flow.report.html`.
 
 There is no flag. A step is a soft navigation when the main frame navigates within the document and no document starts loading. Every soft navigation step needs `throttlingMethod: 'devtools'` or `'provided'`; see [Throttling](/docs/guides/throttling).
 

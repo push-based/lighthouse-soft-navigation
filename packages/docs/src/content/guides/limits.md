@@ -8,9 +8,10 @@
 
 ## Troubleshooting
 
-| Symptom                             | Cause and fix                                                                                                        |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| The step fails with `NO_FCP`        | Chrome didn't report a soft navigation. Make the click render new content, use a real click and Chrome 149 or newer. |
-| The metric audits error             | The step ran with simulated throttling. Pass `throttlingMethod: 'devtools'`.                                         |
-| The step is measured as a page load | The click loaded a document: a link the router doesn't handle, a reload or a redirect.                               |
-| Multiple soft navigations warning   | The click changed the route more than once. Only the first is measured.                                              |
+| Symptom                             | Cause and fix                                                                                                                                                                            |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The step fails with `NO_FCP`        | Chrome didn't report a soft navigation. The interaction has to be a real input such as `page.click`, and it has to paint new content. Check that Chrome is 149 or newer.                 |
+| The metric audits error             | The step ran with simulated throttling. Pass `throttlingMethod: 'devtools'`.                                                                                                             |
+| The step is measured as a page load | The click loaded a document: a link the router doesn't handle, a reload or a redirect.                                                                                                   |
+| Multiple soft navigations warning   | The click changed the route more than once. Only the first is measured.                                                                                                                  |
+| `user-flow collect --dryRun` fails  | Dry runs don't support navigations that start with a callback or `startNavigation` yet. Run without `--dryRun`; see [user-flow#355](https://github.com/push-based/user-flow/issues/355). |

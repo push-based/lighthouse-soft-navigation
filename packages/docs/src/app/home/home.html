@@ -151,91 +151,22 @@
 <section class="sections">
   <div docsReveal>
     <p class="text-subtitle section-eyebrow">Documentation</p>
-    <h2 class="section-title">Find your way around</h2>
+    <h2 class="section-title">Four short pages</h2>
   </div>
-  <div class="section-grid">
-    @for (section of sections; track section.slug; let i = $index) {
-    <div class="section-card" docsReveal [docsRevealDelay]="(i % 5) * 70">
-      <h3 class="section-card-title">
-        <svg
-          class="section-card-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          @for (d of sectionIcons[section.slug]; track $index) {
-          <path [attr.d]="d" />
-          }
-        </svg>
-        {{ section.title }}
-      </h3>
-      <ul class="section-links">
-        @for (page of section.pages; track page.slug) {
-        <li>
-          <a
-            class="section-link"
-            [routerLink]="['/docs', section.slug, page.slug]"
-          >
-            {{ page.title }}
-            <span class="pb-arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-        }
-      </ul>
-    </div>
+  <div class="page-grid">
+    @for (page of pages; track page.path; let i = $index) {
+    <a
+      class="section-card page-card"
+      [routerLink]="page.path"
+      docsReveal
+      [docsRevealDelay]="i * 70"
+    >
+      <span class="page-card-title">
+        {{ page.title }}
+        <span class="pb-arrow" aria-hidden="true">→</span>
+      </span>
+      <span class="page-card-body">{{ page.description }}</span>
+    </a>
     }
-  </div>
-</section>
-
-<section class="cta" docsReveal>
-  <div class="cta-band">
-    <div class="cta-glow" aria-hidden="true"></div>
-    <svg class="brand-mark cta-mark" viewBox="0 0 1360 1360" aria-hidden="true">
-      <use href="images/mark.svg#mark" />
-    </svg>
-    <div class="cta-copy">
-      <h2 class="cta-title">Ready to measure your route changes?</h2>
-      <p class="cta-body">
-        One config turns the soft navigations of your app into navigation steps
-        with a Performance score.
-      </p>
-    </div>
-    <div class="cta-actions">
-      <button
-        class="cta-command"
-        type="button"
-        (click)="copyInstall()"
-        [class.copied]="copied()"
-        title="Copy the install command"
-      >
-        <span class="cta-prompt" aria-hidden="true">$</span>
-        <code>{{ install }}</code>
-        <span class="cta-copy-state" aria-live="polite"
-          >{{ copied() ? 'Copied' : 'Copy' }}</span
-        >
-      </button>
-      <a
-        class="pb-btn pb-btn-lg cta-btn"
-        routerLink="/docs/getting-started/usage"
-      >
-        Read the usage guide
-        <svg
-          class="btn-arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </a>
-    </div>
   </div>
 </section>

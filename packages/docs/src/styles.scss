@@ -320,6 +320,12 @@ pre {
     margin-top: 0;
   }
 
+  /* A page that starts with a heading sits right under the header's rule. */
+  > h2:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
   h2,
   h3,
   h4 {

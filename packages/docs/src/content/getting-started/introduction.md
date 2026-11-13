@@ -8,5 +8,3 @@ A soft navigation is a route change that updates the URL and the content without
 
 - Lighthouse 13.6 or newer
 - Chrome 149 or newer, the first version that reports soft navigations in the trace
-
-Continue with [Usage](/docs/getting-started/usage).
