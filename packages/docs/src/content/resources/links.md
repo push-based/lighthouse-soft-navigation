@@ -19,4 +19,4 @@
 
 ## Related tools
 
-- [@push-based/user-flow](https://push-based.github.io/user-flow/): a CLI to write, run and report Lighthouse user flows. Pass `softNavigationConfig()` as its Lighthouse config.
+- [@push-based/user-flow](https://push-based.github.io/user-flow/): a CLI to write, run and report Lighthouse user flows. Its [soft navigations integration](https://push-based.github.io/user-flow/docs/integrations/soft-navigations) shows how to use this package in a flow file.

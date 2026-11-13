@@ -31,7 +31,7 @@ await startFlow(page, {
 });
 ```
 
-The config it returns has only the settings that were passed in. Lighthouse fills in the defaults, so settings from elsewhere, such as the settings of a user-flow project, still apply.
+The config it returns has only the settings that were passed in. Lighthouse fills in the defaults, so settings that a tool layers under the config, such as the project settings of user-flow, still apply.
 
 The function is idempotent: calling it on a config it returned does not add anything twice.
 

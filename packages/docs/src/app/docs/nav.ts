@@ -108,13 +108,6 @@ export const DOCS_NAV: DocSection[] = [
           'What a soft navigation step cannot measure, and what to do when a step fails or has a warning.',
         load: md(() => import('../../content/guides/limits.md')),
       },
-      {
-        slug: 'user-flow',
-        title: 'Using with user-flow',
-        description:
-          'Measure soft navigations in the *.uf.mts flows of @push-based/user-flow.',
-        load: md(() => import('../../content/guides/user-flow.md')),
-      },
     ],
   },
   {

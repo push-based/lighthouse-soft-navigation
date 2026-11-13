@@ -53,8 +53,6 @@ The setting for the whole flow applies to page loads too. With `devtools` thrott
 | On each soft step  | Page load numbers have to compare with PageSpeed Insights or Lighthouse |
 | For the whole flow | Every step should be measured the same way                              |
 
-With user-flow, both setups work the same way in a flow file, and a project can set the throttling method for every flow in `.user-flowrc.json`. See [Using with user-flow](/docs/guides/user-flow#settings).
-
 ## Longer steps
 
 With any throttling method but `simulate`, Lighthouse waits longer before it ends a step: at least 5.25 s instead of 1 s after FCP and after load, and for the network and the CPU to go quiet. Expect each soft navigation step to take several seconds.
