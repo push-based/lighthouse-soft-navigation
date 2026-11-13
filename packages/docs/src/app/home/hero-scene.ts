@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 /**
- * The hero illustration: a browser window that soft navigates. The cursor
- * clicks a card, the URL changes without a new document, the next view
- * renders in place, and the metrics of the soft navigation step pop in below.
- * The whole scene tilts with the pointer through the `--px`/`--py` variables
- * set by the `docsTilt` directive on the hero.
+ * The hero illustration: the same two-step user flow run twice. On stock
+ * Lighthouse the soft navigation step waits for a page load and fails with
+ * NO_FCP. Then the config is switched on, and the step is measured: FCP, LCP
+ * and a Performance score. The whole scene tilts with the pointer through the
+ * `--px`/`--py` variables set by the `docsTilt` directive on the hero.
  *
  * The animation is pure CSS so the server and the client render the same
- * markup, and it stops under `prefers-reduced-motion`.
+ * markup. Under `prefers-reduced-motion` it shows the measured step.
  */
 @Component({
   selector: 'docs-hero-scene',
@@ -18,16 +18,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   host: {
     role: 'img',
     'aria-label':
-      'A browser window: a click on a product card changes the URL from / to /products without loading a document, the product list renders in place, and the step reports FCP, LCP and a Performance score.',
+      'A user flow with two steps. The page load scores 88. On stock Lighthouse the soft navigation step waits for a page load and fails with NO_FCP. With the config it is measured: FCP 0.4 seconds, LCP 0.7 seconds and a Performance score of 97.',
   },
 })
-export class HeroScene {
-  readonly metrics = [
-    { label: 'FCP', value: '0.4 s' },
-    { label: 'LCP', value: '0.7 s' },
-    { label: 'Performance', value: '97', score: true },
-  ];
-
-  readonly cards = [0, 1, 2];
-  readonly rows = [0, 1, 2, 3];
-}
+export class HeroScene {}

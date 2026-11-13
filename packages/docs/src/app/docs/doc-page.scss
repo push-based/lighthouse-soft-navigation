@@ -9,8 +9,10 @@
   align-items: start;
 }
 
+// The column is kept on pages without a table of contents, so the text is as
+// wide on every page.
 @media (min-width: 1200px) {
-  .doc-layout.has-toc {
+  .doc-layout {
     grid-template-columns: minmax(0, 1fr) 220px;
   }
 }

@@ -55,14 +55,6 @@ export class App {
       label: 'Report an issue',
       href: 'https://github.com/push-based/lighthouse-soft-navigation/issues/new',
     },
-    {
-      label: 'Releases',
-      href: 'https://github.com/push-based/lighthouse-soft-navigation/releases',
-    },
-    {
-      label: 'Design discussion',
-      href: 'https://github.com/push-based/lighthouse-soft-navigation/issues/1',
-    },
   ];
 
   readonly footerResources = [

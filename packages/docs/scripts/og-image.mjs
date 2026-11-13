@@ -1,27 +1,16 @@
 // Renders public/og-image.png (1200×630), the preview card for links to the
-// docs, from an HTML version of the landing page hero, and the favicon and
-// touch icon from the mark. Run it after changing the hero's look or the mark:
+// docs, from an HTML version of the landing page hero. Run it after changing
+// the hero's look:
 //
 //   node packages/docs/scripts/og-image.mjs
 //
 // It needs the repository's puppeteer and fetches the Geist fonts.
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { launch } from 'puppeteer';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const mark = await readFile(join(root, 'public/images/mark.svg'), 'utf8');
-const symbol = mark.replace(
-  /<svg[^>]*>/,
-  '<svg width="0" height="0" style="position:absolute">',
-);
-
-const metrics = [
-  ['FCP', '0.4 s'],
-  ['LCP', '0.7 s'],
-  ['Performance', '97'],
-];
 
 const html = `<!doctype html>
 <html><head><meta charset="utf-8">
@@ -41,28 +30,25 @@ const html = `<!doctype html>
   h1 b { font-weight: 600; background: linear-gradient(100deg, #c3b5fd, #ff94ad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   p { margin: 24px 0 0; font-size: 24px; line-height: 1.4; color: #9aa4b2; max-width: 560px; }
   .url { position: absolute; left: 80px; bottom: 54px; font-family: 'Geist Mono', monospace; font-size: 20px; color: #cdd5df; }
-  .scene { position: absolute; right: 70px; top: 120px; width: 420px; }
-  .window { border: 1px solid #364152; border-radius: 18px; background: #121926; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); overflow: hidden; }
-  .bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #202939; background: #0d121c; }
+  .scene { position: absolute; right: 70px; top: 130px; width: 420px; }
+  .card { border: 1px solid #364152; border-radius: 18px; background: #121926; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); overflow: hidden; }
+  .bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #202939; background: #0d121c; font-size: 14px; color: #9aa4b2; }
   .bar i { width: 10px; height: 10px; border-radius: 50%; background: #364152; }
-  .addr { flex: 1; padding: 4px 12px; border: 1px solid #202939; border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 14px; color: #697586; }
-  .addr b { font-weight: 500; color: #c3b5fd; }
-  .badge { white-space: nowrap; padding: 2px 10px; border-radius: 999px; background: #2e125e; color: #ddd6fe; font-family: 'Geist Mono', monospace; font-size: 12px; }
-  .page { display: grid; gap: 10px; padding: 18px; }
-  .title { width: 40%; height: 14px; border-radius: 6px; background: #364152; }
-  .row { display: flex; gap: 12px; align-items: center; padding: 8px; border: 1px solid #202939; border-radius: 10px; }
-  .row i { width: 40px; height: 28px; border-radius: 6px; background: rgb(135 91 247 / .35); }
-  .row span { flex: 1; display: grid; gap: 6px; }
-  .row u { display: block; height: 7px; width: 80%; border-radius: 4px; background: #202939; }
-  .row u + u { width: 50%; }
-  .metrics { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
-  .metric { padding: 8px 16px; border: 1px solid #364152; border-radius: 999px; background: #121926; font-size: 16px; color: #9aa4b2; }
-  .metric b { margin-left: 6px; font-family: 'Geist Mono', monospace; color: #f8fafc; }
-  .metric.score { border-color: transparent; background: #16a34a; color: #fff; }
-  .metric.score b { color: #fff; }
+  .bar i + span { margin-left: 4px; }
+  .switch { display: grid; grid-template-columns: 1fr 1fr; margin: 16px 16px 0; padding: 3px; border: 1px solid #202939; border-radius: 10px; font-family: 'Geist Mono', monospace; font-size: 13px; text-align: center; color: #697586; }
+  .switch span { padding: 6px; border: 1px solid transparent; border-radius: 7px; }
+  .switch .on { border-color: #5720b7; background: #2e125e; color: #ddd6fe; }
+  .steps { display: grid; gap: 12px; padding: 16px; }
+  .step { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px; border: 1px solid #202939; border-radius: 12px; }
+  .step.soft { border-color: #5720b7; }
+  .num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #2e125e; color: #ddd6fe; font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 600; }
+  .name { display: block; font-size: 17px; font-weight: 600; }
+  .note { display: block; margin-top: 4px; font-size: 14px; color: #9aa4b2; }
+  .note b { font-family: 'Geist Mono', monospace; font-weight: 500; color: #f8fafc; }
+  .gauge { display: grid; place-items: center; width: 52px; height: 52px; border: 4px solid #4ade80; border-radius: 50%; font-family: 'Geist Mono', monospace; font-size: 16px; font-weight: 600; color: #4ade80; }
+  .gauge.average { border-color: #fbbf24; color: #fbbf24; }
 </style></head>
 <body>
-${symbol}
 <div class="grid"></div>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
@@ -73,12 +59,13 @@ ${symbol}
 </div>
 <div class="url">push-based.github.io/lighthouse-soft-navigation</div>
 <div class="scene">
-  <div class="window">
-    <div class="bar"><i></i><i></i><i></i><span class="addr">shop.example<b>/products</b></span><span class="badge">soft navigation</span></div>
-    <div class="page"><span class="title"></span>${'<span class="row"><i></i><span><u></u><u></u></span></span>'.repeat(3)}</div>
-  </div>
-  <div class="metrics">
-    ${metrics.map(([label, value], i) => `<span class="metric${i === 2 ? ' score' : ''}">${label}<b>${value}</b></span>`).join('')}
+  <div class="card">
+    <div class="bar"><i></i><i></i><i></i><span>Lighthouse user flow</span></div>
+    <div class="switch"><span>Stock Lighthouse</span><span class="on">With the config</span></div>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><span><span class="name">Page load</span><span class="note">Measured as a navigation</span></span><span class="gauge average">88</span></div>
+      <div class="step soft"><span class="num">2</span><span><span class="name">Soft navigation</span><span class="note">FCP <b>0.4 s</b> · LCP <b>0.7 s</b></span></span><span class="gauge">97</span></div>
+    </div>
   </div>
 </div>
 </body></html>`;
@@ -91,21 +78,5 @@ await page.evaluate(() => document.fonts.ready);
 const png = await page.screenshot({ type: 'png' });
 await writeFile(join(root, 'public/og-image.png'), png);
 console.log('wrote public/og-image.png');
-
-// The favicon and the touch icon: the mark on a light tile.
-for (const [file, size, pad] of [
-  ['favicon.png', 64, 0],
-  ['apple-touch-icon.png', 180, 20],
-]) {
-  await page.setViewport({ width: size, height: size, deviceScaleFactor: 1 });
-  await page.setContent(
-    `<body style="margin:0;background:${pad ? '#fff' : 'transparent'}">${symbol}<svg viewBox="0 0 1360 1360" style="display:block;margin:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px;stroke:#0d121c;color:#fff"><use href="#mark"/></svg></body>`,
-  );
-  await writeFile(
-    join(root, 'public', file),
-    await page.screenshot({ type: 'png', omitBackground: !pad }),
-  );
-  console.log(`wrote public/${file}`);
-}
 
 await browser.close();

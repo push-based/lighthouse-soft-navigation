@@ -1,9 +1,31 @@
-// One soft navigation. Every keyframe set below shares this duration, so the
-// cursor, the URL, the views and the metrics stay in step. Timeline, in
-// percent of the cycle: cursor travels 4–20, clicks at 22, the URL changes at
-// 25, the next view renders 27–40, the metrics pop in 42–54, everything holds
-// until 90 and fades back to the start.
-$cycle: 8s;
+// One loop: the flow runs on stock Lighthouse, then with the config. Every
+// keyframe set shares this duration so the switch, the status line and the
+// gauge of step 2 stay in step. Timeline, in percent of the cycle:
+// waiting 4–30, NO_FCP 31–46, the switch moves at 48, measuring 51–57,
+// measured 58–95, then back to the start.
+$cycle: 11s;
+// Circumference of the gauge ring (r = 17).
+$ring: 106.8;
+
+// Shows an element between two points of the cycle.
+@mixin window($name, $from, $to) {
+  animation: #{$name} $cycle infinite;
+
+  @keyframes #{$name} {
+    0%,
+    #{($from - 1.5) * 1%} {
+      opacity: 0;
+    }
+    #{$from * 1%},
+    #{$to * 1%} {
+      opacity: 1;
+    }
+    #{($to + 1.5) * 1%},
+    100% {
+      opacity: 0;
+    }
+  }
+}
 
 :host {
   display: block;
@@ -12,7 +34,7 @@ $cycle: 8s;
 
 .scene {
   position: relative;
-  padding: var(--space-4) 0 var(--space-2);
+  padding: var(--space-4) 0;
   // The pointer over the hero (see the docsTilt directive) tilts the scene.
   transform: perspective(1100px) rotateX(calc(var(--py, 0) * -5deg))
     rotateY(calc(var(--px, 0) * 7deg));
@@ -27,7 +49,7 @@ $cycle: 8s;
   filter: blur(48px);
 }
 
-.window {
+.card {
   position: relative;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-xl, 1rem);
@@ -43,6 +65,8 @@ $cycle: 8s;
   padding: var(--space-2-5) var(--space-3);
   border-bottom: 1px solid var(--border);
   background: var(--surface-subtle);
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .dots {
@@ -57,457 +81,408 @@ $cycle: 8s;
   }
 }
 
-.url {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  padding: 3px var(--space-3);
+/* The switch: a thumb slides from stock Lighthouse to the config. */
+.switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: var(--space-4) var(--space-4) 0;
+  padding: 3px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle);
   border: 1px solid var(--border);
-  border-radius: var(--radius-full, 999px);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.125rem;
-  color: var(--text-muted);
 }
 
-.host {
+.switch-thumb {
+  position: absolute;
+  inset: 3px 50% 3px 3px;
+  border: 1px solid var(--accent-outline);
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  animation: thumb $cycle var(--ease-in-out) infinite;
+}
+
+.switch-option {
+  position: relative;
+  padding: var(--space-1-5) var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  text-align: center;
+  white-space: nowrap;
   color: var(--text-subtle);
 }
 
-.paths {
-  position: relative;
-  flex: 1;
+.switch-stock {
+  animation: option-stock $cycle infinite;
 }
 
-.path {
-  position: absolute;
-  left: 0;
-  color: var(--text-heading);
+.switch-config {
+  animation: option-config $cycle infinite;
 }
 
-.path-a {
-  animation: path-a $cycle infinite;
-}
-
-.path-b {
-  color: var(--link);
-  animation: path-b $cycle infinite;
-}
-
-.badge {
-  padding: 1px var(--space-2);
-  border-radius: var(--radius-full, 999px);
-  background: var(--accent-soft);
-  color: var(--accent-soft-text);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  line-height: 1.125rem;
-  white-space: nowrap;
-  animation: show-after-click $cycle infinite;
-}
-
-.page {
-  position: relative;
-  height: clamp(190px, 46vw, 230px);
-  padding: var(--space-4);
-}
-
-.view {
-  position: absolute;
-  inset: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.view-a {
-  animation: view-a $cycle infinite;
-}
-
-.view-b {
-  animation: view-b $cycle infinite;
-}
-
-.block,
-.line,
-.card-img,
-.card-line,
-.row-img {
-  display: block;
-  border-radius: var(--radius-md);
-  background: var(--border);
-}
-
-.block-hero {
-  height: 52px;
-  background: linear-gradient(
-    100deg,
-    color-mix(in srgb, var(--grad-a) 22%, transparent),
-    color-mix(in srgb, var(--grad-b) 18%, transparent)
-  );
-}
-
-.line {
-  width: 46%;
-  height: 8px;
-}
-
-.line-wide {
-  width: 72%;
-}
-
-.line-title {
-  width: 38%;
-  height: 12px;
-  margin-bottom: var(--space-1);
-  background: var(--border-strong);
-}
-
-.cards {
+.steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 6px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
-
-.card-img {
-  height: 34px;
-}
-
-.card-line {
-  width: 70%;
-  height: 6px;
-}
-
-.card-target {
-  animation: card-press $cycle infinite;
-}
-
-.row {
-  display: flex;
-  align-items: center;
   gap: var(--space-3);
-  padding: 6px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  animation: row-in $cycle infinite;
-  animation-delay: calc(var(--r) * 0.12s);
-}
-
-.row-img {
-  flex: none;
-  width: 30px;
-  height: 22px;
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-}
-
-.row-lines {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 5px;
-
-  .line {
-    height: 6px;
-  }
-}
-
-// The cursor starts bottom right and ends on the middle card.
-.cursor {
-  position: absolute;
-  left: 50%;
-  top: 72%;
-  z-index: 2;
-  width: 22px;
-  height: 22px;
-  fill: var(--surface);
-  stroke: var(--text-heading);
-  stroke-width: 1.6;
-  stroke-linejoin: round;
-  animation: cursor $cycle infinite;
-}
-
-.ripple {
-  position: absolute;
-  left: calc(50% + 2px);
-  top: calc(72% + 2px);
-  width: 28px;
-  height: 28px;
-  margin: -14px 0 0 -14px;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  opacity: 0;
-  animation: ripple $cycle infinite;
-}
-
-.push {
-  position: absolute;
-  right: var(--space-3);
-  bottom: var(--space-3);
-  padding: 2px var(--space-2);
-  border: 1px solid var(--accent-outline);
-  border-radius: var(--radius-md);
-  background: var(--surface-glass);
-  color: var(--accent-soft-text);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  animation: push $cycle infinite;
-}
-
-.metrics {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  gap: var(--space-2);
-  margin: var(--space-4) 0 0;
-  padding: 0;
+  margin: 0;
+  padding: var(--space-4);
   list-style: none;
 }
 
-.metric {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-1-5);
-  padding: var(--space-1-5) var(--space-3);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-full, 999px);
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-md);
-  animation: metric $cycle infinite;
-  animation-delay: calc(var(--i) * 0.16s);
+.step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
-.metric-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+.step-soft {
+  animation: step-soft $cycle infinite;
 }
 
-.metric-value {
+.step-num {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.step-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.step-name {
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-heading);
 }
 
-.metric-score {
-  border-color: transparent;
-  background: var(--ok-bg);
+.step-code {
+  overflow: hidden;
+  padding: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.125rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+}
 
-  .metric-label,
-  .metric-value {
-    color: var(--ok-fg);
+/* The status lines of a step share one row and take turns. */
+.status {
+  position: relative;
+  display: block;
+  height: 1.5rem;
+  margin-top: var(--space-1);
+}
+
+.status-line {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  overflow: hidden;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.status-static {
+  color: var(--ok);
+}
+
+.status-wait {
+  @include window(status-wait, 4, 30);
+}
+
+.status-error {
+  font-weight: 600;
+  color: var(--color-error-600);
+  @include window(status-error, 32, 46);
+}
+
+.status-measure {
+  @include window(status-measure, 51, 56);
+}
+
+.status-ok {
+  @include window(status-ok, 59, 95);
+}
+
+.chip {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full, 999px);
+  line-height: 1.25rem;
+
+  b {
+    font-family: var(--font-mono);
+    color: var(--text-heading);
   }
 }
 
-@keyframes cursor {
+/* Gauges: a ring with the score, as in the Lighthouse report. */
+.gauge-slot {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+
+  .gauge {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.gauge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  --gauge: var(--color-success-600);
+
+  svg {
+    position: absolute;
+    inset: 0;
+    rotate: -90deg;
+  }
+
+  circle {
+    fill: none;
+    stroke-width: 3;
+  }
+}
+
+.gauge-track {
+  stroke: var(--border);
+}
+
+.gauge-arc {
+  stroke: var(--gauge);
+  stroke-linecap: round;
+  stroke-dasharray: $ring;
+}
+
+.gauge-value {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gauge);
+}
+
+.gauge-average {
+  --gauge: var(--color-warning-600);
+
+  .gauge-arc {
+    stroke-dashoffset: $ring * 0.12;
+  }
+}
+
+// A quarter arc that spins while the step runs.
+.gauge-pending {
+  --gauge: var(--text-subtle);
+  animation: pending $cycle infinite;
+
+  .gauge-arc {
+    stroke-dashoffset: $ring * 0.75;
+  }
+
+  svg {
+    animation: spin 1s linear infinite;
+  }
+}
+
+.gauge-fail {
+  --gauge: var(--color-error-600);
+  @include window(gauge-fail, 32, 46);
+
+  .gauge-arc {
+    fill: color-mix(in srgb, var(--gauge) 12%, transparent);
+  }
+}
+
+.gauge-pass {
+  @include window(gauge-pass, 59, 95);
+
+  .gauge-arc {
+    animation: fill-pass $cycle infinite;
+  }
+}
+
+@keyframes thumb {
   0%,
-  4% {
-    translate: 90px 40px;
-    opacity: 0;
+  46% {
+    translate: 0 0;
   }
-  8% {
-    opacity: 1;
+  50%,
+  96% {
+    translate: 100% 0;
   }
-  20%,
-  23% {
-    translate: 0 -40px;
-    scale: 1;
-  }
-  22% {
-    scale: 0.85;
-  }
-  32%,
-  86% {
-    translate: 0 -40px;
-    opacity: 1;
-  }
-  92%,
   100% {
-    translate: 0 -40px;
-    opacity: 0;
+    translate: 0 0;
   }
 }
 
-@keyframes ripple {
+@keyframes option-stock {
   0%,
-  21% {
-    opacity: 0;
-    scale: 0.4;
-    translate: 0 -40px;
+  46%,
+  100% {
+    color: var(--accent-soft-text);
   }
-  22% {
-    opacity: 1;
-    translate: 0 -40px;
+  50%,
+  96% {
+    color: var(--text-subtle);
   }
+}
+
+@keyframes option-config {
+  0%,
+  46%,
+  100% {
+    color: var(--text-subtle);
+  }
+  50%,
+  96% {
+    color: var(--accent-soft-text);
+  }
+}
+
+@keyframes step-soft {
+  0%,
   30%,
-  100% {
-    opacity: 0;
-    scale: 1.8;
-    translate: 0 -40px;
-  }
-}
-
-@keyframes card-press {
-  0%,
-  19%,
-  26%,
+  48%,
+  57%,
+  97%,
   100% {
     border-color: var(--border);
   }
-  20%,
-  24% {
-    border-color: var(--accent);
+  32%,
+  46% {
+    border-color: var(--color-error-400);
   }
-}
-
-@keyframes path-a {
-  0%,
-  24%,
-  96%,
-  100% {
-    opacity: 1;
-  }
-  25%,
+  59%,
   95% {
-    opacity: 0;
+    border-color: var(--accent-outline);
   }
 }
 
-@keyframes path-b {
+// The spinner shows while the step runs, in both passes.
+@keyframes pending {
   0%,
-  24%,
-  96%,
+  2.5%,
+  31.5%,
+  49.5%,
+  58.5%,
   100% {
     opacity: 0;
   }
-  25%,
-  95% {
+  4%,
+  30%,
+  51%,
+  57% {
     opacity: 1;
   }
 }
 
-@keyframes show-after-click {
-  0%,
-  24%,
-  94%,
-  100% {
-    opacity: 0;
-  }
-  27%,
-  90% {
-    opacity: 1;
+@keyframes spin {
+  to {
+    rotate: 270deg;
   }
 }
 
-@keyframes push {
+@keyframes fill-pass {
   0%,
-  23%,
-  44%,
-  100% {
-    opacity: 0;
-    translate: 0 4px;
+  58% {
+    stroke-dashoffset: $ring;
   }
-  26%,
-  40% {
-    opacity: 1;
-    translate: 0 0;
+  66%,
+  100% {
+    stroke-dashoffset: $ring * 0.03;
   }
 }
 
-@keyframes view-a {
-  0%,
-  25%,
-  96%,
-  100% {
-    opacity: 1;
-  }
-  28%,
-  94% {
-    opacity: 0;
-  }
-}
-
-@keyframes view-b {
-  0%,
-  26%,
-  96%,
-  100% {
-    opacity: 0;
-  }
-  28%,
-  94% {
-    opacity: 1;
-  }
-}
-
-@keyframes row-in {
-  0%,
-  27% {
-    opacity: 0;
-    translate: 0 6px;
-  }
-  34%,
-  92% {
-    opacity: 1;
-    translate: 0 0;
-  }
-  96%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes metric {
-  0%,
-  42% {
-    opacity: 0;
-    translate: 0 8px;
-    scale: 0.92;
-  }
-  48%,
-  90% {
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
-  }
-  96%,
-  100% {
-    opacity: 0;
-  }
-}
-
-// Without motion, the scene shows the end state: the next view and its metrics.
+// Without motion, the scene shows the measured step.
 @media (prefers-reduced-motion: reduce) {
   .scene {
     transform: none;
   }
 
-  .path-a,
-  .view-a,
-  .cursor,
-  .ripple,
-  .push {
+  .switch-thumb,
+  .switch-option,
+  .step-soft,
+  .status-line,
+  .gauge,
+  .gauge svg,
+  .gauge-arc {
     animation: none;
+  }
+
+  .switch-thumb {
+    translate: 100% 0;
+  }
+
+  .switch-config {
+    color: var(--accent-soft-text);
+  }
+
+  .step-soft {
+    border-color: var(--accent-outline);
+  }
+
+  .status-wait,
+  .status-error,
+  .status-measure,
+  .gauge-pending,
+  .gauge-fail {
     opacity: 0;
   }
 
-  .path-b,
-  .view-b,
-  .badge,
-  .row,
-  .metric,
-  .card-target {
-    animation: none;
-    opacity: 1;
+  .gauge-pass .gauge-arc {
+    stroke-dashoffset: $ring * 0.03;
   }
+}
+
+@mixin dark-scene {
+  .gauge {
+    --gauge: var(--color-success-400);
+  }
+
+  .gauge-average {
+    --gauge: var(--color-warning-400);
+  }
+
+  .gauge-pending {
+    --gauge: var(--text-subtle);
+  }
+
+  .gauge-fail {
+    --gauge: var(--color-error-400);
+  }
+
+  .status-error {
+    color: var(--color-error-400);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :host-context(:root:not([data-theme='light'])) {
+    @include dark-scene;
+  }
+}
+
+:host-context(:root[data-theme='dark']) {
+  @include dark-scene;
 }

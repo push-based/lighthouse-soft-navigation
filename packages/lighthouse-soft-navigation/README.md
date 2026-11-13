@@ -61,7 +61,7 @@ A soft navigation step needs `throttlingMethod: 'devtools'` or `'provided'`.
 
 Lighthouse's default, `simulate`, loads the page without throttling and then estimates a throttled load from the requests of the page, starting at the document request. A soft navigation requests no document, so there is nothing to estimate from. With `simulate`, the metric audits fail and the step has a run warning that says so. `devtools` slows the network and CPU in Chrome while the step runs and measures what happens. `provided` applies no throttling and measures the step as it runs.
 
-The package can't make that switch for you. A flow has one config for all of its steps, and the package only recognises a soft navigation while the step runs, after its throttling method is set. The Lighthouse change would switch it for soft navigations; see [Upstreaming to Lighthouse](https://push-based.github.io/lighthouse-soft-navigation/docs/upstream/overview#why-the-package-cannot-use-the-same-flag).
+The package can't make that switch for you. A flow has one config for all of its steps, and the package only recognises a soft navigation while the step runs, after its throttling method is set. The Lighthouse change would switch it for soft navigations; see [Upstreaming to Lighthouse](../../docs/upstreaming-to-lighthouse.md#why-the-package-cannot-use-the-same-flag).
 
 Set it on each soft navigation step, as in [Usage](#usage), or once for the whole flow:
 
@@ -214,7 +214,7 @@ The config overrides pieces of the default config. Lighthouse's navigation runne
 | Audits that need the document request           | Wrapped: either not applicable, or run the way Lighthouse runs them in a timespan (`network-requests` and the unused/unminified CSS and JavaScript audits).                                                                                                                                                       |
 | `performance` category                          | Gets a hidden `soft-navigation` audit ref.                                                                                                                                                                                                                                                                        |
 
-Each piece stands in for a change in Lighthouse itself. See [Upstreaming to Lighthouse](https://push-based.github.io/lighthouse-soft-navigation/docs/upstream/overview) and the [override map](https://push-based.github.io/lighthouse-soft-navigation/docs/upstream/override-map).
+Each piece stands in for a change in Lighthouse itself. See [Upstreaming to Lighthouse](../../docs/upstreaming-to-lighthouse.md).
 
 ## Development
 

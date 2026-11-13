@@ -34,7 +34,7 @@
     <div class="hero-actions enter" style="--enter: 5">
       <a
         class="pb-btn pb-btn-lg pb-btn-primary pb-btn-glow"
-        routerLink="/docs/getting-started/quick-start"
+        routerLink="/docs/getting-started/usage"
       >
         Get started
         <svg
@@ -75,37 +75,16 @@
     <docs-hero-scene />
   </div>
 
-  <figure class="hero-code code-terminal enter" style="--enter: 6">
+  <figure class="hero-code enter" style="--enter: 6">
     <figcaption class="code-title">
-      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span>Terminal</span>
-      <button
-        class="terminal-replay"
-        type="button"
-        (click)="replay()"
-        aria-label="Replay"
-        title="Replay"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
-          <path d="M3 3v5h5" />
-        </svg>
-      </button>
+      <span>flow.mjs</span>
       <button
         class="code-copy"
         type="button"
         [class.copied]="copied()"
-        (click)="copyInstall()"
-        aria-label="Copy the install command"
-        title="Copy the install command"
+        (click)="copySnippet()"
+        aria-label="Copy the code"
+        title="Copy the code"
       >
         <svg
           class="icon-copy"
@@ -135,140 +114,42 @@
         <span class="code-copy-label" aria-hidden="true">Copied</span>
       </button>
     </figcaption>
-    <!-- Each command types itself out once; the server renders them in full.
-         Replaying re-creates the block so the animations run again. -->
-    @for (run of [runs()]; track run) {
-    <pre><code><span class="term-comment"># install and run a flow with a soft navigation</span>
-@for (line of commands; track line.text) {<span class="term-prompt">$ </span><span class="type-line" [style.--chars]="line.chars" [style.--start]="line.start + 'ms'">{{ line.text }}</span>
-}<span class="term-out type-out type-out-spinner" [style.--start]="outputStart + 'ms'" [style.--end]="outputStart + 1500 + 'ms'"><i class="term-spinner" aria-hidden="true"></i> running the flow</span><span class="term-out term-ok type-out" [style.--start]="outputStart + 1500 + 'ms'">✔ shop.example/ <span class="term-dim">· page load · performance 88</span></span>
-<span class="term-out term-ok type-out" [style.--start]="outputStart + 1800 + 'ms'">✔ shop.example/products <span class="term-dim">· soft navigation · performance 97</span></span>
-<span class="term-out type-out" [style.--start]="outputStart + 2200 + 'ms'">→ flow.report.html</span>
-<span class="term-prompt type-out" [style.--start]="outputStart + 2700 + 'ms'">$ <i class="term-cursor" aria-hidden="true"></i></span></code></pre>
-    }
+    <!-- prettier-ignore -->
+    <pre><code><span class="hljs-keyword">import</span> &#123; startFlow &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'lighthouse'</span>;
+<span class="hljs-keyword">import</span> &#123; softNavigationConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'&#64;push-based/lighthouse-soft-navigation'</span>;
+
+<span class="hljs-comment">// `page` is a Puppeteer page.</span>
+<span class="hljs-keyword">const</span> flow = <span class="hljs-keyword">await</span> <span class="hljs-title function_">startFlow</span>(page, &#123; <span class="hljs-attr">config</span>: <span class="hljs-title function_">softNavigationConfig</span>() &#125;);
+
+<span class="hljs-comment">// Load the page first: a soft navigation starts from a loaded page.</span>
+<span class="hljs-keyword">await</span> flow.<span class="hljs-title function_">navigate</span>(<span class="hljs-string">'https://example.com'</span>);
+
+<span class="hljs-comment">// A click that only changes the route is now a navigation step too.</span>
+<span class="hljs-keyword">await</span> flow.<span class="hljs-title function_">navigate</span>(() =&gt; page.<span class="hljs-title function_">click</span>(<span class="hljs-string">'a.product-link'</span>), &#123;
+  <span class="hljs-attr">throttlingMethod</span>: <span class="hljs-string">'devtools'</span>,
+&#125;);</code></pre>
   </figure>
-</section>
-
-<docs-how-it-works />
-
-<docs-report-preview />
-
-<section class="benefits">
-  <div docsReveal>
-    <p class="text-subtitle section-eyebrow">Why this package</p>
-    <h2 class="section-title">Measure what users wait for after a click</h2>
-  </div>
-  <div class="card-grid">
-    @for (benefit of benefits; track benefit.title; let i = $index) {
-    <article class="feature-card" docsReveal [docsRevealDelay]="(i % 3) * 90">
-      <span class="icon-tile" aria-hidden="true">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          @for (d of icons[benefit.icon]; track $index) {
-          <path [attr.d]="d" />
-          }
-        </svg>
-      </span>
-      <h3 class="feature-title">{{ benefit.title }}</h3>
-      <p class="feature-body">{{ benefit.body }}</p>
-    </article>
-    }
-  </div>
 </section>
 
 <section class="sections">
   <div docsReveal>
     <p class="text-subtitle section-eyebrow">Documentation</p>
-    <h2 class="section-title">Find your way around</h2>
+    <h2 class="section-title">Four short pages</h2>
   </div>
-  <div class="section-grid">
-    @for (section of sections; track section.slug; let i = $index) {
-    <div class="section-card" docsReveal [docsRevealDelay]="(i % 5) * 70">
-      <h3 class="section-card-title">
-        <svg
-          class="section-card-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          @for (d of sectionIcons[section.slug]; track $index) {
-          <path [attr.d]="d" />
-          }
-        </svg>
-        {{ section.title }}
-      </h3>
-      <ul class="section-links">
-        @for (page of section.pages; track page.slug) {
-        <li>
-          <a
-            class="section-link"
-            [routerLink]="['/docs', section.slug, page.slug]"
-          >
-            {{ page.title }}
-            <span class="pb-arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-        }
-      </ul>
-    </div>
+  <div class="page-grid">
+    @for (page of pages; track page.path; let i = $index) {
+    <a
+      class="section-card page-card"
+      [routerLink]="page.path"
+      docsReveal
+      [docsRevealDelay]="i * 70"
+    >
+      <span class="page-card-title">
+        {{ page.title }}
+        <span class="pb-arrow" aria-hidden="true">→</span>
+      </span>
+      <span class="page-card-body">{{ page.description }}</span>
+    </a>
     }
-  </div>
-</section>
-
-<section class="cta" docsReveal>
-  <div class="cta-band">
-    <div class="cta-glow" aria-hidden="true"></div>
-    <svg class="brand-mark cta-mark" viewBox="0 0 1360 1360" aria-hidden="true">
-      <use href="images/mark.svg#mark" />
-    </svg>
-    <div class="cta-copy">
-      <h2 class="cta-title">Ready to measure your route changes?</h2>
-      <p class="cta-body">
-        One config turns the soft navigations of your app into navigation steps
-        with a Performance score.
-      </p>
-    </div>
-    <div class="cta-actions">
-      <button
-        class="cta-command"
-        type="button"
-        (click)="copyInstall()"
-        [class.copied]="copied()"
-        title="Copy the install command"
-      >
-        <span class="cta-prompt" aria-hidden="true">$</span>
-        <code>{{ install }}</code>
-        <span class="cta-copy-state" aria-live="polite"
-          >{{ copied() ? 'Copied' : 'Copy' }}</span
-        >
-      </button>
-      <a
-        class="pb-btn pb-btn-lg cta-btn"
-        routerLink="/docs/getting-started/quick-start"
-      >
-        Read the quick start
-        <svg
-          class="btn-arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </a>
-    </div>
   </div>
 </section>
