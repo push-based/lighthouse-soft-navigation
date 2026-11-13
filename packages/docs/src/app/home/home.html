@@ -34,7 +34,7 @@
     <div class="hero-actions enter" style="--enter: 5">
       <a
         class="pb-btn pb-btn-lg pb-btn-primary pb-btn-glow"
-        routerLink="/docs/getting-started/quick-start"
+        routerLink="/docs/getting-started/usage"
       >
         Get started
         <svg
@@ -148,39 +148,6 @@
   </figure>
 </section>
 
-<docs-how-it-works />
-
-<docs-report-preview />
-
-<section class="benefits">
-  <div docsReveal>
-    <p class="text-subtitle section-eyebrow">Why this package</p>
-    <h2 class="section-title">Measure what users wait for after a click</h2>
-  </div>
-  <div class="card-grid">
-    @for (benefit of benefits; track benefit.title; let i = $index) {
-    <article class="feature-card" docsReveal [docsRevealDelay]="(i % 3) * 90">
-      <span class="icon-tile" aria-hidden="true">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          @for (d of icons[benefit.icon]; track $index) {
-          <path [attr.d]="d" />
-          }
-        </svg>
-      </span>
-      <h3 class="feature-title">{{ benefit.title }}</h3>
-      <p class="feature-body">{{ benefit.body }}</p>
-    </article>
-    }
-  </div>
-</section>
-
 <section class="sections">
   <div docsReveal>
     <p class="text-subtitle section-eyebrow">Documentation</p>
@@ -253,9 +220,9 @@
       </button>
       <a
         class="pb-btn pb-btn-lg cta-btn"
-        routerLink="/docs/getting-started/quick-start"
+        routerLink="/docs/getting-started/usage"
       >
-        Read the quick start
+        Read the usage guide
         <svg
           class="btn-arrow"
           viewBox="0 0 24 24"

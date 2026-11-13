@@ -205,60 +205,6 @@
   font-weight: 600;
 }
 
-.dg-axis {
-  stroke: var(--border-strong);
-  stroke-width: 1.5;
-}
-
-.dg-tick {
-  stroke: var(--dg-stroke, var(--text-subtle));
-  stroke-width: 2;
-}
-
-.dg-dot {
-  fill: var(--dg-stroke, var(--link));
-}
-
-.dg-span {
-  fill: var(--accent-soft);
-  stroke: var(--accent-outline);
-  stroke-width: 1;
-}
-
-.dg-fail {
-  fill: var(--color-error-600);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.dg-ok {
-  fill: var(--color-success-600);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.dg-badge rect {
-  fill: var(--surface-subtle);
-  stroke: var(--border-strong);
-}
-
-.dg-badge text {
-  fill: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-}
-
-.dg-badge-package rect {
-  fill: var(--accent-soft);
-  stroke: var(--accent-outline);
-}
-
-.dg-badge-package text {
-  fill: var(--accent-soft-text);
-}
-
 /* Opacity only: a CSS transform would replace the SVG transform attribute. */
 .reveal-pending:not(.reveal-in) .dg-pop {
   opacity: 0;
@@ -267,23 +213,4 @@
 .reveal-in .dg-pop {
   transition: opacity 0.45s ease-out;
   transition-delay: calc(200ms + var(--n, 0) * 90ms);
-}
-
-@mixin dark-figures {
-  .dg-fail {
-    fill: var(--color-error-400);
-  }
-  .dg-ok {
-    fill: var(--color-success-400);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    @include dark-figures;
-  }
-}
-
-:root[data-theme='dark'] {
-  @include dark-figures;
 }

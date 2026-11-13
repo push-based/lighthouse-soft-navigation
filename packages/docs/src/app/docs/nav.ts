@@ -32,20 +32,6 @@ export const SECTION_ICONS: Record<string, string[]> = {
     'M9 17h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15',
     'M18 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
   ],
-  // Braces
-  reference: [
-    'M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1',
-    'M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1',
-  ],
-  // Git pull request
-  upstream: [
-    'M18 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
-    'M6 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
-    'M13 6h3a2 2 0 0 1 2 2v7',
-    'M6 9v12',
-  ],
-  // Book
-  resources: ['M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'],
 };
 
 export const DOCS_NAV: DocSection[] = [
@@ -57,22 +43,15 @@ export const DOCS_NAV: DocSection[] = [
         slug: 'introduction',
         title: 'Introduction',
         description:
-          'What a soft navigation is, why stock Lighthouse cannot measure one and what the package changes.',
+          'What a soft navigation is and what the package adds to Lighthouse user flows.',
         load: md(() => import('../../content/getting-started/introduction.md')),
       },
       {
-        slug: 'installation',
-        title: 'Installation',
+        slug: 'usage',
+        title: 'Usage',
         description:
-          'Install the package next to Lighthouse, and the Lighthouse and Chrome versions it needs.',
-        load: md(() => import('../../content/getting-started/installation.md')),
-      },
-      {
-        slug: 'quick-start',
-        title: 'Quick start',
-        description:
-          'Run a user flow with a page load and a soft navigation, and open the flow report.',
-        load: md(() => import('../../content/getting-started/quick-start.md')),
+          'Install the package, measure a soft navigation step and read its result, with Lighthouse or user-flow.',
+        load: md(() => import('../../content/getting-started/usage.md')),
       },
     ],
   },
@@ -81,92 +60,18 @@ export const DOCS_NAV: DocSection[] = [
     title: 'Guides',
     pages: [
       {
-        slug: 'steps',
-        title: 'Soft navigation steps',
-        description:
-          'Write soft navigation steps with a callback or with startNavigation, and how the package recognises them.',
-        load: md(() => import('../../content/guides/steps.md')),
-      },
-      {
-        slug: 'results',
-        title: 'Reading the results',
-        description:
-          'The shape of a soft navigation step, its metrics, the audits that do not apply and its run warnings.',
-        load: md(() => import('../../content/guides/results.md')),
-      },
-      {
         slug: 'throttling',
         title: 'Throttling',
         description:
-          'Why a soft navigation step needs DevTools or provided throttling instead of simulated throttling.',
+          'Why a soft navigation step needs DevTools or provided throttling, per step or for the whole flow.',
         load: md(() => import('../../content/guides/throttling.md')),
       },
       {
         slug: 'limits',
         title: 'Limits and troubleshooting',
         description:
-          'What a soft navigation step cannot measure, and what to do when a step fails or has a warning.',
+          'What a soft navigation step cannot measure, and what to do when one fails.',
         load: md(() => import('../../content/guides/limits.md')),
-      },
-    ],
-  },
-  {
-    slug: 'reference',
-    title: 'Reference',
-    pages: [
-      {
-        slug: 'api',
-        title: 'API',
-        description:
-          'softNavigationConfig, the gatherers and audits it is built from, and the exported run warnings.',
-        load: md(() => import('../../content/reference/api.md')),
-      },
-      {
-        slug: 'how-it-works',
-        title: 'How it works',
-        description:
-          'How the gatherers, the trace and the wrapped audits turn a soft navigation into a navigation step.',
-        load: md(() => import('../../content/reference/how-it-works.md')),
-      },
-    ],
-  },
-  {
-    slug: 'upstream',
-    title: 'Upstreaming',
-    pages: [
-      {
-        slug: 'overview',
-        title: 'Upstreaming to Lighthouse',
-        description:
-          'The target behaviour in Lighthouse, why the package cannot use the same flag and how it stays swappable.',
-        load: md(() => import('../../content/upstream/overview.md')),
-      },
-      {
-        slug: 'override-map',
-        title: 'Override map',
-        description:
-          'Each override of the package next to the Lighthouse change it stands in for, with the files involved.',
-        load: md(() => import('../../content/upstream/override-map.md')),
-      },
-      {
-        slug: 'landing-plan',
-        title: 'Landing plan',
-        description:
-          'The proposed sequence of Lighthouse pull requests and the open questions for the Lighthouse team.',
-        load: md(() => import('../../content/upstream/landing-plan.md')),
-      },
-    ],
-  },
-  {
-    slug: 'resources',
-    title: 'Resources',
-    pages: [
-      {
-        slug: 'links',
-        title: 'Links',
-        description:
-          'The Lighthouse issues and pull requests, Chrome soft navigation docs and related tools.',
-        load: md(() => import('../../content/resources/links.md')),
       },
     ],
   },

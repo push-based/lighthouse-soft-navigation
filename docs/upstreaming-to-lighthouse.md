@@ -1,6 +1,72 @@
-Each override of the package stands in for one change in Lighthouse. This table maps them, so the two stay aligned and each upstream PR has a clear scope. File paths are from [#17075](https://github.com/GoogleChrome/lighthouse/pull/17075) unless noted.
+# Upstreaming to Lighthouse
 
-| Concern                         | Package override on stock Lighthouse                                                                                                                                                                                                               | Lighthouse change                                                                                                                                                                                                                       | Files                                                                                                                                                     |
+This package makes soft navigations measurable as navigation steps of a Lighthouse user flow **today**, on
+stock Lighthouse. The long-term goal is for the same behaviour to live in Lighthouse itself, at which point
+this package shrinks to a thin compatibility layer and is then deprecated.
+
+The package is built as overrides of the Lighthouse config: gatherers, audits and one category. Lighthouse's
+navigation runner, trace processor and metric audits stay stock. Each override stands in for one change in
+Lighthouse, and this document maps them, so the two stay aligned and each upstream PR has a clear scope.
+
+- Tracking issue: [GoogleChrome/lighthouse#14573](https://github.com/GoogleChrome/lighthouse/issues/14573)
+- Prototype of the upstream change: [GoogleChrome/lighthouse#17075](https://github.com/GoogleChrome/lighthouse/pull/17075) (draft, currently has merge conflicts with `main`)
+- Prerequisite bug fix: [GoogleChrome/lighthouse#17434](https://github.com/GoogleChrome/lighthouse/pull/17434) (fail fast when a navigation callback only soft navigates)
+- Design of the package: [#1](https://github.com/push-based/lighthouse-soft-navigation/issues/1)
+- Earlier implementation with its own runner: [app-speed `libs/audit/user-flow/runner/src/lib/soft-navigation`](https://github.com/ChristopherPHolder/app-speed/tree/main/libs/audit/user-flow/runner/src/lib/soft-navigation)
+
+## Target behaviour
+
+A soft navigation is a **navigation step**, not a timespan. Upstream, the API from #17075 is a single setting:
+
+```js
+await flow.navigate('https://example.com');
+
+await flow.navigate(
+  async () => {
+    await page.click('a.product-link');
+  },
+  { softNavigation: true },
+);
+
+await flow.startNavigation({ softNavigation: true });
+await page.click('a.checkout-link');
+await flow.endNavigation();
+```
+
+The resulting step has `gatherMode: 'navigation'` and `configSettings.softNavigation: true`. It has a
+Performance score, and FCP/LCP are measured from the `SoftNavigationStart` trace event. The page is never
+reset before the step. Chrome 149 or newer is required.
+
+With the package, the same steps are written without the setting and with observed throttling:
+
+```js
+const flow = await startFlow(page, { config: softNavigationConfig() });
+
+await flow.navigate(
+  async () => {
+    await page.click('a.product-link');
+  },
+  { throttlingMethod: 'devtools' },
+);
+```
+
+### Why the package cannot use the same flag
+
+`cleanFlagsForSettings` in `core/config/config-helpers.js` drops every flag that is not a key of
+`defaultSettings`, and a flow has one config for all of its steps. A `softNavigation` flag passed to
+`startNavigation` never reaches `context.settings` on stock Lighthouse.
+
+The package therefore recognises a soft navigation instead of being told about one: the main frame navigates
+within the document, and no document starts loading. For the same reason it cannot switch simulated
+throttling to DevTools throttling for the step, which is why the step passes `throttlingMethod` itself.
+
+Adding `softNavigation: false` to `defaultSettings` is the first and smallest upstream change. It is useful
+on its own: once it ships, the package can read the flag from `context.settings` and only bridge steps that
+ask for it.
+
+## Override → Lighthouse change
+
+| Concern                         | Package override on stock Lighthouse                                                                                                                                                                                                               | Lighthouse change                                                                                                                                                                                                                       | Files (from #17075 unless noted)                                                                                                                          |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Setting**                     | None. A soft navigation is recognised from the protocol events of the step                                                                                                                                                                         | `softNavigation` setting, documented as experimental                                                                                                                                                                                    | `core/config/constants.js`, `types/lhr/settings.d.ts`                                                                                                     |
 | **Gathering**                   | `SoftNavigation` gatherer: on a main frame `Page.navigatedWithinDocument` it emits `Page.frameNavigated`, `Page.domContentEventFired` and `Page.loadEventFired` on the Lighthouse session, so `gotoURL` and its wait conditions complete unchanged | Navigation runner waits on `['softNavigation']` instead of `load`/`fcp`; `waitForSoftNavigation` waits for `Page.navigatedWithinDocument` plus network and CPU quiet; `gotoURL` uses the in-document URL as requested/main document URL | `core/gather/navigation-runner.js`, `core/gather/driver/navigation.js`, `core/gather/driver/wait-for-condition.js`                                        |
@@ -35,3 +101,52 @@ access to any of those showed that most of the branches are not needed:
 - **Audits do not have to be filtered out.** The only audits that cannot run are the ones that need the
   document request. Making the main resource optional for them covers soft navigations and removes the
   timespan special cases `network-requests` and `byte-efficiency-audit` already have.
+
+## Keeping the package swappable
+
+To make adopting the upstream version a mechanical change for user-flow and other consumers, the package
+produces the result shape Lighthouse will:
+
+- Steps have `gatherMode: 'navigation'`.
+- Audit IDs stay `first-contentful-paint` / `largest-contentful-paint`, computed by the stock audits with
+  their scoring curves.
+- The multiple-navigation warning uses the upstream `UIStrings` wording.
+
+Two steps are left for when Lighthouse moves:
+
+- Once `softNavigation` is in `defaultSettings`, the package reads it and only bridges the steps that set it.
+- Once a Lighthouse version has native support, `softNavigationConfig` returns the config unchanged for it.
+
+The e2e suite doubles as an upstream conformance check. Pointing the workspace `lighthouse` dependency at a
+tarball built from a Lighthouse branch (`yarn build-all && npm pack`) shows whether that branch produces the
+same results as the package.
+
+## Proposed landing sequence
+
+#17075 touches about 40 files and is hard to review in one go. I plan to split it into PRs that each make
+sense alone, most of them inert until the setting is used:
+
+1. **#17434: fail fast on soft navigations** (open). Replaces the 30 s `NO_FCP` hang with a clear error,
+   which is the fallback behaviour when `softNavigation` is not set.
+2. **Trace processing.** `SoftNavigationStart` time origin and `processSoftNavigation` in tracehouse, with
+   trace fixtures from Chrome 149+. Pure functions, no behaviour change for existing runs.
+3. **Setting and config.** `softNavigation` in `defaultSettings`/`settings.d.ts` and the settings overrides.
+   This also unblocks the package from using the upstream flag.
+4. **Gathering.** `waitForSoftNavigation` including the FCP wait, `gotoURL` and the navigation runner.
+   This is where the feature turns on.
+5. **Audits without a document request and errors.** Optional main resource, `NO_SOFT_NAVIGATION`
+   (including the proto enum) and the multiple-navigation warning.
+6. **Report and docs.** Flow report labels, default step name and `docs/user-flows.md`.
+
+## Open questions for the Lighthouse team
+
+- **Multiple soft navigations per step:** measure only the first (current proposal), fail, or split?
+- **Scoring:** the page-load FCP/LCP curves are reused. Soft navigations likely deserve their own curves,
+  or no Performance score until there is field data to calibrate against.
+- **Document audits:** not applicable (the package), filtered out (#17075), or evaluated against the
+  document that was already loaded?
+- **INP:** keep it in the soft navigation step (it covers the triggering interaction) with zero weight, as
+  in timespans?
+- **Chrome support:** soft navigation trace events require Chrome 149+. Should Lighthouse feature-detect
+  and emit a dedicated error on older Chrome?
+- **Timespans:** should a timespan that contains a soft navigation warn and point to the navigation step?
