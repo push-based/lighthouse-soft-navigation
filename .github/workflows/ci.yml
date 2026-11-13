@@ -19,14 +19,17 @@ jobs:
           filter: tree:0
           fetch-depth: 0
 
-      # Cache node_modules
+      # Installs the pnpm version of the packageManager field
+      - uses: pnpm/action-setup@v6
+
+      # Cache the pnpm store
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       # The e2e suite drives Chrome, which the runner has the libraries for.
-      - run: npx nx format:check --base="remotes/origin/main"
-      - run: npx nx run-many -t lint test build typecheck e2e
+      - run: pnpm nx format:check --base="remotes/origin/main"
+      - run: pnpm nx run-many -t lint test build typecheck e2e

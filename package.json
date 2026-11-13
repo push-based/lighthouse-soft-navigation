@@ -19,6 +19,7 @@
     "@nx/rolldown": "^24.0.0",
     "@nx/vitest": "^24.0.0",
     "@nx/web": "^24.0.0",
+    "@push-based/user-flow": "0.21.6",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
@@ -40,10 +41,7 @@
     "vite": "^8.0.0",
     "vitest": "~5.0.1"
   },
-  "workspaces": [
-    "packages/*"
-  ],
-  "packageManager": "npm@11.20.0",
+  "packageManager": "pnpm@11.28.9",
   "nx": {
     "includedScripts": [],
     "targets": {

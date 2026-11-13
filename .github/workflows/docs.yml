@@ -8,7 +8,8 @@ on:
       - 'packages/docs/**'
       - '.github/workflows/docs.yml'
       - 'package.json'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
   workflow_dispatch:
 
 permissions:
@@ -28,14 +29,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      # Installs the pnpm version of the packageManager field
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Build and prerender
-        run: npx nx build docs --configuration=production --skip-nx-cache
+        run: pnpm nx build docs --configuration=production --skip-nx-cache
       - name: Prepare GitHub Pages artifact
         # Unknown routes fall back to the app shell and `.nojekyll` keeps Pages from ignoring files that start with an underscore.
         run: |

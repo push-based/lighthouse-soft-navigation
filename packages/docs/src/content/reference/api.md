@@ -31,7 +31,9 @@ await startFlow(page, {
 });
 ```
 
-The function is idempotent: a config that already has the `SoftNavigation` artifact is returned as it is.
+The config it returns has only the settings that were passed in. Lighthouse fills in the defaults, so settings from elsewhere, such as the settings of a user-flow project, still apply.
+
+The function is idempotent: calling it on a config it returned does not add anything twice.
 
 What it changes in the config:
 

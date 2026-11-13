@@ -27,7 +27,7 @@ const fixtures = fileURLToPath(new URL('./fixtures', import.meta.url));
 
 /**
  * Starts Verdaccio, publishes the package to it under the `e2e` tag and installs it into a
- * consumer project, next to the Lighthouse and Puppeteer versions of the workspace.
+ * consumer project, next to the Lighthouse, Puppeteer and user-flow versions of the workspace.
  */
 export default async function setup(project: TestProject) {
   process.chdir(workspaceRoot);
@@ -90,7 +90,7 @@ function installConsumer(directory: string) {
     execSync(command, { cwd: directory, stdio: 'inherit', env: process.env });
 
   run(
-    `npm install ${PACKAGE}@e2e lighthouse@${devDependencies.lighthouse} puppeteer@${devDependencies.puppeteer}`,
+    `npm install ${PACKAGE}@e2e lighthouse@${devDependencies.lighthouse} puppeteer@${devDependencies.puppeteer} @push-based/user-flow@${devDependencies['@push-based/user-flow']}`,
   );
   // npm does not run Puppeteer's install script, so the browser is downloaded here if it is missing.
   run('npx puppeteer browsers install chrome');

@@ -5,7 +5,7 @@ The documentation site for `@push-based/lighthouse-soft-navigation`, built with 
 ## Develop
 
 ```bash
-npx nx serve docs
+pnpm nx serve docs
 ```
 
 Opens a dev server with hot reload on http://localhost:4300.
@@ -13,7 +13,7 @@ Opens a dev server with hot reload on http://localhost:4300.
 ## Build
 
 ```bash
-npx nx build docs
+pnpm nx build docs
 ```
 
 Produces a fully prerendered site in `dist/packages/docs/browser` with `/lighthouse-soft-navigation/` as base href, ready for GitHub Pages. Use `--configuration=development` for a build with `/` as base href.

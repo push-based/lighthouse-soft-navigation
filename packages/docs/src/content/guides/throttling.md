@@ -28,15 +28,33 @@ A Lighthouse user flow has one config for all of its steps, and Lighthouse drops
 
 Upstream support in Lighthouse switches `simulate` to `devtools` for soft navigation steps automatically. See [Upstreaming to Lighthouse](/docs/upstream/overview).
 
-## Comparing with page loads
+## For the whole flow
 
-DevTools throttling slows down the run itself, so numbers from `devtools` and `simulate` are not directly comparable. To compare a soft navigation with the page load of the same route, measure both with the same method:
+Instead of passing `throttlingMethod` to each soft navigation step, set it once in the config:
 
 ```js
-await flow.navigate('https://example.com/products', observed);
-await flow.navigate(() => page.click('a.home-link'), observed);
-await flow.navigate(() => page.click('a.products-link'), observed);
+const flow = await startFlow(page, {
+  config: softNavigationConfig({
+    extends: 'lighthouse:default',
+    settings: { throttlingMethod: 'devtools' },
+  }),
+});
+
+await flow.navigate('https://example.com');
+await flow.navigate(async () => {
+  await page.click('a.product-link');
+});
 ```
 
-> [!TIP]
-> Set `throttlingMethod: 'devtools'` in the config's settings to use it for every step of the flow, page loads included: `softNavigationConfig({ extends: 'lighthouse:default', settings: { throttlingMethod: 'devtools' } })`.
+The setting for the whole flow applies to page loads too. With `devtools` throttling, a page load is actually slowed down, so the flow takes longer and its numbers vary more between runs. They also no longer compare with PageSpeed Insights or a default Lighthouse run, which both use `simulate`.
+
+| Set it             | When                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| On each soft step  | Page load numbers have to compare with PageSpeed Insights or Lighthouse |
+| For the whole flow | Every step should be measured the same way                              |
+
+With user-flow, both setups work the same way in a flow file, and a project can set the throttling method for every flow in `.user-flowrc.json`. See [Using with user-flow](/docs/guides/user-flow#settings).
+
+## Longer steps
+
+With any throttling method but `simulate`, Lighthouse waits longer before it ends a step: at least 5.25 s instead of 1 s after FCP and after load, and for the network and the CPU to go quiet. Expect each soft navigation step to take several seconds.
