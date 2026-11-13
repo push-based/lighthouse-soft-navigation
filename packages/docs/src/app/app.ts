@@ -79,8 +79,8 @@ export class App {
       href: 'https://github.com/WICG/soft-navigations',
     },
     {
-      label: 'user-flow',
-      href: 'https://push-based.github.io/user-flow/',
+      label: 'Use with user-flow',
+      href: 'https://push-based.github.io/user-flow/docs/integrations/soft-navigations',
     },
   ];
 

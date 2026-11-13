@@ -53,4 +53,4 @@ To tell the two apart in the JSON result, look at the `soft-navigation` audit. I
 
 - [Soft navigation steps](/docs/guides/steps) shows every way to write a step.
 - [Limits](/docs/guides/limits) lists what a step cannot measure, and what to do when one fails.
-- Using [@push-based/user-flow](https://push-based.github.io/user-flow/)? See [Using with user-flow](/docs/guides/user-flow).
+- Using [@push-based/user-flow](https://push-based.github.io/user-flow/)? See the [soft navigations integration](https://push-based.github.io/user-flow/docs/integrations/soft-navigations) in the user-flow docs.
