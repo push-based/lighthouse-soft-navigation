@@ -16,7 +16,8 @@
         "typecheck": {
           "targetName": "typecheck"
         }
-      }
+      },
+      "exclude": ["packages/docs/**/*"]
     },
     {
       "plugin": "@nx/vitest",
