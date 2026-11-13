@@ -13,11 +13,16 @@ import { Tilt } from '../shared/tilt';
 import { PACKAGE_VERSION } from '../../content/version.generated';
 
 /** The code in the hero, as the copy button hands it out. */
-const SNIPPET = `import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
+const SNIPPET = `import { startFlow } from 'lighthouse';
+import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
+// \`page\` is a Puppeteer page.
 const flow = await startFlow(page, { config: softNavigationConfig() });
 
-// A click that only changes the route is a navigation step.
+// Load the page first: a soft navigation starts from a loaded page.
+await flow.navigate('https://example.com');
+
+// A click that only changes the route is now a navigation step too.
 await flow.navigate(() => page.click('a.product-link'), {
   throttlingMethod: 'devtools',
 });

@@ -115,11 +115,16 @@
       </button>
     </figcaption>
     <!-- prettier-ignore -->
-    <pre><code><span class="hljs-keyword">import</span> &#123; softNavigationConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'&#64;push-based/lighthouse-soft-navigation'</span>;
+    <pre><code><span class="hljs-keyword">import</span> &#123; startFlow &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'lighthouse'</span>;
+<span class="hljs-keyword">import</span> &#123; softNavigationConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'&#64;push-based/lighthouse-soft-navigation'</span>;
 
+<span class="hljs-comment">// `page` is a Puppeteer page.</span>
 <span class="hljs-keyword">const</span> flow = <span class="hljs-keyword">await</span> <span class="hljs-title function_">startFlow</span>(page, &#123; <span class="hljs-attr">config</span>: <span class="hljs-title function_">softNavigationConfig</span>() &#125;);
 
-<span class="hljs-comment">// A click that only changes the route is a navigation step.</span>
+<span class="hljs-comment">// Load the page first: a soft navigation starts from a loaded page.</span>
+<span class="hljs-keyword">await</span> flow.<span class="hljs-title function_">navigate</span>(<span class="hljs-string">'https://example.com'</span>);
+
+<span class="hljs-comment">// A click that only changes the route is now a navigation step too.</span>
 <span class="hljs-keyword">await</span> flow.<span class="hljs-title function_">navigate</span>(() =&gt; page.<span class="hljs-title function_">click</span>(<span class="hljs-string">'a.product-link'</span>), &#123;
   <span class="hljs-attr">throttlingMethod</span>: <span class="hljs-string">'devtools'</span>,
 &#125;);</code></pre>

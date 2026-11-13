@@ -6,7 +6,7 @@ npm install @push-based/lighthouse-soft-navigation lighthouse puppeteer
 
 ## Measure a soft navigation
 
-Pass `softNavigationConfig()` to `startFlow`, then trigger the route change in a navigation step:
+Pass `softNavigationConfig()` to `startFlow`, load the page, then trigger the route change in a navigation step. The page load has to come first: a soft navigation starts from a page that is already loaded.
 
 ```js title="flow.mjs"
 import { writeFileSync } from 'node:fs';
@@ -18,10 +18,10 @@ const browser = await puppeteer.launch();
 const page = await browser.newPage();
 const flow = await startFlow(page, { config: softNavigationConfig() });
 
-// A page load, measured by stock Lighthouse.
+// Load the page first. This step is measured by stock Lighthouse.
 await flow.navigate('https://example.com');
 
-// A soft navigation.
+// A soft navigation, from the loaded page.
 await flow.navigate(() => page.click('a.product-link'), {
   throttlingMethod: 'devtools',
 });
