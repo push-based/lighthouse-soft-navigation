@@ -35,10 +35,18 @@ const gatherers: Record<string, GathererClass> = {
  *   default config.
  */
 export function softNavigationConfig(config?: LH.Config): LH.Config {
-  const base = resolveExtension(config);
+  const resolved = resolveExtension(config);
+  // Only the settings that were passed in. Resolving `extends` copies every default setting, and
+  // Lighthouse fills those in anyway. A tool that layers its own settings under the config's, like
+  // user-flow, would otherwise have every one of them replaced by its default.
+  const { settings: _resolvedSettings, ...rest } = resolved;
+  const base: LH.Config = {
+    ...(config?.settings && { settings: config.settings }),
+    ...rest,
+  };
   const artifacts = base.artifacts ?? [];
   if (artifacts.some((artifact) => artifact.id === SOFT_NAVIGATION_ARTIFACT)) {
-    return base;
+    return resolved === config ? config : base;
   }
 
   return {

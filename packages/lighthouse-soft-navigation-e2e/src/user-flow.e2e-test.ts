@@ -16,14 +16,18 @@ type Step = FlowResult.Step;
  * 4. soft navigation to /products, from the `startNavigation` and `endNavigation` steps of a recording
  * 5. page load of /about, clicked in a `navigate` callback
  */
-function collect(consumerDirectory: string) {
-  const reports = join(consumerDirectory, 'user-flow-reports');
-  rmSync(reports, { recursive: true, force: true });
-  const { status, stdout, stderr } = spawnSync('node', ['collect.mjs'], {
-    cwd: consumerDirectory,
-    encoding: 'utf8',
-  });
-  return { status, output: `${stdout}${stderr}`, reports };
+function collect(
+  consumerDirectory: string,
+  { rcPath, reports }: { rcPath?: string; reports: string },
+) {
+  const reportDirectory = join(consumerDirectory, reports);
+  rmSync(reportDirectory, { recursive: true, force: true });
+  const { status, stdout, stderr } = spawnSync(
+    'node',
+    ['collect.mjs', ...(rcPath ? [rcPath] : [])],
+    { cwd: consumerDirectory, encoding: 'utf8' },
+  );
+  return { status, output: `${stdout}${stderr}`, reports: reportDirectory };
 }
 
 function readReport(directory: string, extension: 'json' | 'md') {
@@ -42,7 +46,9 @@ describe('user-flow collect with soft navigations', () => {
   let origin: string;
 
   beforeAll(() => {
-    const { status, output, reports } = collect(consumerDirectory);
+    const { status, output, reports } = collect(consumerDirectory, {
+      reports: 'user-flow-reports',
+    });
     expect(status, output).toBe(0);
     steps = (JSON.parse(readReport(reports, 'json')) as FlowResult).steps;
     markdown = readReport(reports, 'md');
@@ -151,6 +157,52 @@ describe('user-flow collect with soft navigations', () => {
         .map((cell) => cell.trim());
       expect(gatherMode).toBe('navigation');
       expect(Number(performance)).toBeGreaterThanOrEqual(0);
+    }
+  });
+});
+
+/**
+ * Runs `fixtures/project-settings/user-flows/soft-navigation.uf.mts` with the settings of
+ * `fixtures/project-settings/.user-flowrc.json`, which observe every step and only run the
+ * performance category. The flow passes no step options.
+ *
+ * 1. page load
+ * 2. soft navigation to /products, clicked in a `navigate` callback
+ * 3. soft navigation to /, clicked between `startNavigation` and `endNavigation`
+ */
+describe('user-flow collect with the settings of .user-flowrc.json', () => {
+  const consumerDirectory = inject('consumerDirectory');
+
+  let steps: Step[];
+
+  beforeAll(() => {
+    const { status, output, reports } = collect(consumerDirectory, {
+      rcPath: 'project-settings/.user-flowrc.json',
+      reports: 'project-settings/reports',
+    });
+    expect(status, output).toBe(0);
+    steps = (JSON.parse(readReport(reports, 'json')) as FlowResult).steps;
+  }, 300_000);
+
+  it('applies the settings to every step', () => {
+    for (const { lhr } of steps) {
+      expect(lhr.configSettings.throttlingMethod).toBe('devtools');
+      expect(lhr.configSettings.onlyCategories).toEqual(['performance']);
+      expect(Object.keys(lhr.categories)).toEqual(['performance']);
+    }
+  });
+
+  it('measures the soft navigations without step options', () => {
+    expect(
+      steps.map(({ lhr }) => lhr.audits['soft-navigation'].scoreDisplayMode),
+    ).toEqual(['notApplicable', 'informative', 'informative']);
+    for (const { lhr } of steps) {
+      const errored = Object.values(lhr.audits)
+        .filter(({ scoreDisplayMode }) => scoreDisplayMode === 'error')
+        .map(({ id }) => id);
+      expect(errored).toEqual([]);
+      expect(lhr.runWarnings).toEqual([]);
+      expect(lhr.categories['performance'].score).toEqual(expect.any(Number));
     }
   });
 });

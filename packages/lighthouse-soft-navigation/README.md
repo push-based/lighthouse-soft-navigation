@@ -41,7 +41,7 @@ await flow.endNavigation();
 const result = await flow.createFlowResult();
 ```
 
-`softNavigationConfig(config?)` takes any Lighthouse config, including `desktopConfig` and configs with `extends: 'lighthouse:default'`. Without an argument it uses the default config.
+`softNavigationConfig(config?)` takes any Lighthouse config, including `desktopConfig` and configs with `extends: 'lighthouse:default'`. Without an argument it uses the default config. The config it returns has only the settings that were passed in; Lighthouse fills in the defaults, so settings from elsewhere, such as the settings of a user-flow project, still apply.
 
 There is no flag to set. A navigation step becomes a soft navigation when the main frame navigates within the document and no document starts loading. Page loads, timespans and snapshots run exactly as they do without the package.
 
@@ -116,7 +116,17 @@ npx user-flow collect --url https://example.com --ufPath ./user-flows
 
 ### Settings
 
-Settings for this flow go in the config, through `softNavigationConfig`:
+Settings for every flow of the project go in `collect.config` of `.user-flowrc.json`, or in the file passed with `--configPath`, as for any user-flow project:
+
+```json
+{
+  "collect": {
+    "config": { "settings": { "onlyCategories": ["performance"] } }
+  }
+}
+```
+
+Settings for one flow go in its config, through `softNavigationConfig`. They take precedence over the settings of the project:
 
 ```ts
 config: softNavigationConfig({
@@ -124,8 +134,6 @@ config: softNavigationConfig({
   settings: { onlyCategories: ['performance'] },
 }),
 ```
-
-Settings in `collect.config` of `.user-flowrc.json` and in `--configPath` are ignored for now. `softNavigationConfig()` returns every default setting, and user-flow gives the settings of the flow config precedence over the global ones; see [#8](https://github.com/push-based/lighthouse-soft-navigation/issues/8).
 
 ### Recordings
 

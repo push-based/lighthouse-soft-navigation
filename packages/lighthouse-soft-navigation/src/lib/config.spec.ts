@@ -1,6 +1,7 @@
 import { Audit, defaultConfig, desktopConfig } from 'lighthouse';
 import type * as LH from 'lighthouse/types/lh.js';
 import { initializeConfig } from 'lighthouse/core/config/config.js';
+import { nonSimulatedSettingsOverrides } from 'lighthouse/core/config/constants.js';
 import { documentRequestAudits } from './audits/document-request.js';
 import { SoftNavigationAudit } from './audits/soft-navigation.js';
 import { softNavigationConfig } from './config.js';
@@ -33,9 +34,26 @@ describe('softNavigationConfig', () => {
   it('uses the default config when no config is given', () => {
     const config = softNavigationConfig();
 
-    expect(config.settings).toBe(defaultConfig.settings);
     expect(config.artifacts).toHaveLength(defaultConfig.artifacts!.length + 1);
     expect(config.audits).toHaveLength(defaultConfig.audits!.length + 1);
+  });
+
+  // A tool that layers its own settings under the config's, like user-flow does with the settings
+  // of .user-flowrc.json, would otherwise have every one of them replaced by its default.
+  it('returns only the settings it is given, and Lighthouse fills in the defaults', () => {
+    expect(softNavigationConfig()).not.toHaveProperty('settings');
+    expect(
+      softNavigationConfig({ extends: 'lighthouse:default' }),
+    ).not.toHaveProperty('settings');
+    expect(
+      softNavigationConfig({
+        extends: 'lighthouse:default',
+        settings: { throttlingMethod: 'devtools' },
+      }).settings,
+    ).toEqual({ throttlingMethod: 'devtools' });
+    expect(softNavigationConfig(desktopConfig).settings).toBe(
+      desktopConfig.settings,
+    );
   });
 
   it('does not modify the config it is given', () => {
@@ -189,10 +207,7 @@ describe('softNavigationConfig', () => {
     });
 
     expect(config.extends).toBeUndefined();
-    expect(config.settings).toMatchObject({
-      ...defaultConfig.settings,
-      onlyCategories: ['performance'],
-    });
+    expect(config.settings).toEqual({ onlyCategories: ['performance'] });
     expect(artifact(config, 'Trace')?.gatherer).toEqual({
       implementation: SoftNavigationTrace,
     });
@@ -271,6 +286,28 @@ describe('softNavigationConfig', () => {
       expect(desktop.resolvedConfig.settings.formFactor).toBe('desktop');
       expect(desktop.artifacts).toContain('SoftNavigation');
       expect(extended.artifacts).toContain('SoftNavigation');
+    });
+
+    it('resolves to the default settings and to the settings it is given', async () => {
+      const stock = await resolve('navigation', defaultConfig);
+      const soft = await resolve('navigation', softNavigationConfig());
+      const observed = await resolve(
+        'navigation',
+        softNavigationConfig({
+          extends: 'lighthouse:default',
+          settings: { throttlingMethod: 'devtools' },
+        }),
+      );
+
+      expect(soft.resolvedConfig.settings).toEqual(
+        stock.resolvedConfig.settings,
+      );
+      // Lighthouse raises the wait thresholds itself for any throttling but simulated.
+      expect(observed.resolvedConfig.settings).toEqual({
+        ...stock.resolvedConfig.settings,
+        ...nonSimulatedSettingsOverrides,
+        throttlingMethod: 'devtools',
+      });
     });
 
     it('keeps the trace usable in a timespan and leaves snapshots alone', async () => {

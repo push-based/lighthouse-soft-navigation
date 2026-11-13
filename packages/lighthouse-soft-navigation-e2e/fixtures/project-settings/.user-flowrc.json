@@ -1,0 +1,16 @@
+{
+  "collect": {
+    "ufPath": "./project-settings/user-flows",
+    "config": {
+      "settings": {
+        "throttlingMethod": "devtools",
+        "onlyCategories": ["performance"]
+      }
+    }
+  },
+  "persist": {
+    "outPath": "./project-settings/reports",
+    "format": ["json"],
+    "openReport": false
+  }
+}
