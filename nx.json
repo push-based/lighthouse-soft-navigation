@@ -53,7 +53,7 @@
   "release": {
     "projects": ["lighthouse-soft-navigation"],
     "version": {
-      "preVersionCommand": "npx nx run-many -t build -p lighthouse-soft-navigation",
+      "preVersionCommand": "pnpm nx run-many -t build -p lighthouse-soft-navigation",
       "conventionalCommits": true
     },
     "changelog": {

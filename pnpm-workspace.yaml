@@ -1,0 +1,9 @@
+packages:
+  - 'packages/*'
+
+# Dependencies that may run their install scripts.
+allowBuilds:
+  '@swc/core': true
+  nx: true
+  # The e2e setup downloads Chrome for its consumer project, so the workspace install skips it.
+  puppeteer: false
