@@ -1,0 +1,513 @@
+// One soft navigation. Every keyframe set below shares this duration, so the
+// cursor, the URL, the views and the metrics stay in step. Timeline, in
+// percent of the cycle: cursor travels 4–20, clicks at 22, the URL changes at
+// 25, the next view renders 27–40, the metrics pop in 42–54, everything holds
+// until 90 and fades back to the start.
+$cycle: 8s;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.scene {
+  position: relative;
+  padding: var(--space-4) 0 var(--space-2);
+  // The pointer over the hero (see the docsTilt directive) tilts the scene.
+  transform: perspective(1100px) rotateX(calc(var(--py, 0) * -5deg))
+    rotateY(calc(var(--px, 0) * 7deg));
+  transition: transform 700ms var(--ease-out);
+}
+
+.glow {
+  position: absolute;
+  inset: 10% 6%;
+  border-radius: 50%;
+  background: var(--hero-glow);
+  filter: blur(48px);
+}
+
+.window {
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl, 1rem);
+  background: var(--surface-raised);
+  box-shadow: 0 24px 48px -16px var(--hero-shadow);
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2-5) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-subtle);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+
+  i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+}
+
+.url {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  padding: 3px var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full, 999px);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--text-muted);
+}
+
+.host {
+  color: var(--text-subtle);
+}
+
+.paths {
+  position: relative;
+  flex: 1;
+}
+
+.path {
+  position: absolute;
+  left: 0;
+  color: var(--text-heading);
+}
+
+.path-a {
+  animation: path-a $cycle infinite;
+}
+
+.path-b {
+  color: var(--link);
+  animation: path-b $cycle infinite;
+}
+
+.badge {
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full, 999px);
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.125rem;
+  white-space: nowrap;
+  animation: show-after-click $cycle infinite;
+}
+
+.page {
+  position: relative;
+  height: clamp(190px, 46vw, 230px);
+  padding: var(--space-4);
+}
+
+.view {
+  position: absolute;
+  inset: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.view-a {
+  animation: view-a $cycle infinite;
+}
+
+.view-b {
+  animation: view-b $cycle infinite;
+}
+
+.block,
+.line,
+.card-img,
+.card-line,
+.row-img {
+  display: block;
+  border-radius: var(--radius-md);
+  background: var(--border);
+}
+
+.block-hero {
+  height: 52px;
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--grad-a) 22%, transparent),
+    color-mix(in srgb, var(--grad-b) 18%, transparent)
+  );
+}
+
+.line {
+  width: 46%;
+  height: 8px;
+}
+
+.line-wide {
+  width: 72%;
+}
+
+.line-title {
+  width: 38%;
+  height: 12px;
+  margin-bottom: var(--space-1);
+  background: var(--border-strong);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.card-img {
+  height: 34px;
+}
+
+.card-line {
+  width: 70%;
+  height: 6px;
+}
+
+.card-target {
+  animation: card-press $cycle infinite;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  animation: row-in $cycle infinite;
+  animation-delay: calc(var(--r) * 0.12s);
+}
+
+.row-img {
+  flex: none;
+  width: 30px;
+  height: 22px;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.row-lines {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+
+  .line {
+    height: 6px;
+  }
+}
+
+// The cursor starts bottom right and ends on the middle card.
+.cursor {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  fill: var(--surface);
+  stroke: var(--text-heading);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  animation: cursor $cycle infinite;
+}
+
+.ripple {
+  position: absolute;
+  left: calc(50% + 2px);
+  top: calc(72% + 2px);
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple $cycle infinite;
+}
+
+.push {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--accent-outline);
+  border-radius: var(--radius-md);
+  background: var(--surface-glass);
+  color: var(--accent-soft-text);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  animation: push $cycle infinite;
+}
+
+.metrics {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.metric {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1-5);
+  padding: var(--space-1-5) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full, 999px);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-md);
+  animation: metric $cycle infinite;
+  animation-delay: calc(var(--i) * 0.16s);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.metric-score {
+  border-color: transparent;
+  background: var(--ok-bg);
+
+  .metric-label,
+  .metric-value {
+    color: var(--ok-fg);
+  }
+}
+
+@keyframes cursor {
+  0%,
+  4% {
+    translate: 90px 40px;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  20%,
+  23% {
+    translate: 0 -40px;
+    scale: 1;
+  }
+  22% {
+    scale: 0.85;
+  }
+  32%,
+  86% {
+    translate: 0 -40px;
+    opacity: 1;
+  }
+  92%,
+  100% {
+    translate: 0 -40px;
+    opacity: 0;
+  }
+}
+
+@keyframes ripple {
+  0%,
+  21% {
+    opacity: 0;
+    scale: 0.4;
+    translate: 0 -40px;
+  }
+  22% {
+    opacity: 1;
+    translate: 0 -40px;
+  }
+  30%,
+  100% {
+    opacity: 0;
+    scale: 1.8;
+    translate: 0 -40px;
+  }
+}
+
+@keyframes card-press {
+  0%,
+  19%,
+  26%,
+  100% {
+    border-color: var(--border);
+  }
+  20%,
+  24% {
+    border-color: var(--accent);
+  }
+}
+
+@keyframes path-a {
+  0%,
+  24%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  95% {
+    opacity: 0;
+  }
+}
+
+@keyframes path-b {
+  0%,
+  24%,
+  96%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  95% {
+    opacity: 1;
+  }
+}
+
+@keyframes show-after-click {
+  0%,
+  24%,
+  94%,
+  100% {
+    opacity: 0;
+  }
+  27%,
+  90% {
+    opacity: 1;
+  }
+}
+
+@keyframes push {
+  0%,
+  23%,
+  44%,
+  100% {
+    opacity: 0;
+    translate: 0 4px;
+  }
+  26%,
+  40% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes view-a {
+  0%,
+  25%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  28%,
+  94% {
+    opacity: 0;
+  }
+}
+
+@keyframes view-b {
+  0%,
+  26%,
+  96%,
+  100% {
+    opacity: 0;
+  }
+  28%,
+  94% {
+    opacity: 1;
+  }
+}
+
+@keyframes row-in {
+  0%,
+  27% {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  34%,
+  92% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes metric {
+  0%,
+  42% {
+    opacity: 0;
+    translate: 0 8px;
+    scale: 0.92;
+  }
+  48%,
+  90% {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+
+// Without motion, the scene shows the end state: the next view and its metrics.
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    transform: none;
+  }
+
+  .path-a,
+  .view-a,
+  .cursor,
+  .ripple,
+  .push {
+    animation: none;
+    opacity: 0;
+  }
+
+  .path-b,
+  .view-b,
+  .badge,
+  .row,
+  .metric,
+  .card-target {
+    animation: none;
+    opacity: 1;
+  }
+}
