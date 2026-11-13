@@ -78,7 +78,7 @@ The config overrides pieces of the default config. Lighthouse's navigation runne
 | Audits that need the document request           | Wrapped: either not applicable, or run the way Lighthouse runs them in a timespan (`network-requests` and the unused/unminified CSS and JavaScript audits).                                                                                                                                                       |
 | `performance` category                          | Gets a hidden `soft-navigation` audit ref.                                                                                                                                                                                                                                                                        |
 
-Each piece stands in for a change in Lighthouse itself. See [Upstreaming to Lighthouse](../../docs/upstreaming-to-lighthouse.md).
+Each piece stands in for a change in Lighthouse itself. See [Upstreaming to Lighthouse](https://push-based.github.io/lighthouse-soft-navigation/docs/upstream/overview) and the [override map](https://push-based.github.io/lighthouse-soft-navigation/docs/upstream/override-map).
 
 ## Development
 
