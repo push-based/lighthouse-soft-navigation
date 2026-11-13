@@ -50,3 +50,6 @@ Thumbs.db
 .nx/migrate-runs
 vitest.config.*.timestamp*
 .vitest
+
+# Angular build cache
+.angular

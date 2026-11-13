@@ -1,0 +1,60 @@
+<div class="scene" aria-hidden="true">
+  <div class="glow"></div>
+
+  <div class="window">
+    <div class="bar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="url">
+        <span class="host">shop.example</span>
+        <span class="paths">
+          <span class="path path-a">/</span>
+          <span class="path path-b">/products</span>
+        </span>
+      </span>
+      <span class="badge">soft navigation</span>
+    </div>
+
+    <div class="page">
+      <div class="view view-a">
+        <span class="block block-hero"></span>
+        <span class="line line-wide"></span>
+        <span class="line"></span>
+        <div class="cards">
+          @for (card of cards; track card) {
+          <span class="card" [class.card-target]="card === 1"
+            ><span class="card-img"></span><span class="card-line"></span
+          ></span>
+          }
+        </div>
+      </div>
+
+      <div class="view view-b">
+        <span class="line line-title"></span>
+        @for (row of rows; track row) {
+        <span class="row" [style.--r]="row"
+          ><span class="row-img"></span
+          ><span class="row-lines"
+            ><span class="line line-wide"></span
+            ><span class="line"></span></span
+        ></span>
+        }
+      </div>
+
+      <span class="ripple"></span>
+      <svg class="cursor" viewBox="0 0 24 24">
+        <path d="M5 3l14 7-6 1.8L10 18z" />
+      </svg>
+    </div>
+
+    <span class="push">history.pushState()</span>
+  </div>
+
+  <ul class="metrics">
+    @for (metric of metrics; track metric.label; let i = $index) {
+    <li class="metric" [class.metric-score]="metric.score" [style.--i]="i">
+      <span class="metric-label">{{ metric.label }}</span>
+      <span class="metric-value">{{ metric.value }}</span>
+    </li>
+    }
+  </ul>
+</div>

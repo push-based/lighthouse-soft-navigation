@@ -1,0 +1,289 @@
+// Inline diagrams placed in Markdown with `<!-- diagram: name -->`, drawn in
+// `diagrams.ts`. They use the site's colour roles and animate in through the
+// reveal classes the doc page adds when they scroll into view.
+
+.diagram {
+  margin: var(--space-6) 0 var(--space-8);
+  padding: var(--space-6);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  background: var(--surface-subtle);
+  overflow: hidden;
+}
+
+/* SVG figures: boxes joined by lines that draw themselves. */
+.diagram-svg {
+  padding: var(--space-4) var(--space-5);
+}
+
+.dg-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font-mono);
+}
+
+.dg-layer {
+  fill: var(--text-heading);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dg-layer-note {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.dg-box {
+  rect {
+    fill: var(--surface-raised);
+    stroke: var(--dg-stroke, var(--border-strong));
+    stroke-width: 1.5;
+  }
+
+  text {
+    fill: var(--text-heading);
+    font-size: 13px;
+  }
+}
+
+.dg-box-info {
+  --dg-stroke: var(--color-info-400);
+}
+.dg-box-accent {
+  --dg-stroke: var(--accent-outline);
+
+  rect {
+    fill: var(--accent-soft);
+  }
+}
+.dg-box-success {
+  --dg-stroke: var(--color-success-400);
+}
+.dg-box-warning {
+  --dg-stroke: var(--color-warning-400);
+}
+
+.dg-mark {
+  overflow: visible;
+}
+
+.dg-link {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.reveal-pending:not(.reveal-in) .dg-link {
+  stroke-dashoffset: 1;
+}
+
+.reveal-pending:not(.reveal-in) .dg-box {
+  opacity: 0;
+}
+
+.reveal-in {
+  .dg-link {
+    transition: stroke-dashoffset 0.9s var(--ease-in-out);
+    transition-delay: calc(200ms + var(--n, 0) * 60ms);
+  }
+
+  .dg-box {
+    transition: opacity 0.5s ease-out;
+  }
+}
+
+/* Mode icons inline in text and tables */
+.prose svg.img-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 0 var(--space-1-5) 0 0;
+  vertical-align: -4px;
+  color: var(--link);
+}
+
+/* Screenshots: a standalone image becomes a framed, captioned figure. */
+.prose .figure {
+  margin: var(--space-6) 0 var(--space-8);
+
+  img {
+    margin: 0;
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+}
+
+/* SVG figures: shared text and icon styles */
+.dg-strong {
+  fill: var(--text-heading);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dg-note {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.dg-item {
+  fill: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.dg-icon {
+  color: var(--dg-stroke, var(--link));
+  overflow: visible;
+}
+
+.dg-arrowhead,
+.dg-loop {
+  stroke: var(--border-strong);
+}
+
+/* The call to action at the end of a guide */
+.prose .cta-band-doc {
+  margin: var(--space-10) 0 0;
+
+  /* The install command is long, so the actions go below the copy. */
+  @media (min-width: 768px) {
+    grid-template-columns: auto minmax(0, 1fr);
+
+    .cta-actions {
+      grid-column: 2;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+
+  .cta-title {
+    margin: 0;
+  }
+
+  .cta-body {
+    margin: var(--space-2) 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+  }
+
+  a.cta-btn {
+    text-decoration: none;
+    color: var(--btn-color);
+  }
+
+  code {
+    padding: 0;
+    background: none;
+    color: inherit;
+    font-size: inherit;
+  }
+}
+
+/* Lanes and timelines */
+.dg-lane {
+  fill: var(--text-heading);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dg-axis {
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.dg-tick {
+  stroke: var(--dg-stroke, var(--text-subtle));
+  stroke-width: 2;
+}
+
+.dg-dot {
+  fill: var(--dg-stroke, var(--link));
+}
+
+.dg-span {
+  fill: var(--accent-soft);
+  stroke: var(--accent-outline);
+  stroke-width: 1;
+}
+
+.dg-fail {
+  fill: var(--color-error-600);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dg-ok {
+  fill: var(--color-success-600);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dg-badge rect {
+  fill: var(--surface-subtle);
+  stroke: var(--border-strong);
+}
+
+.dg-badge text {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.dg-badge-package rect {
+  fill: var(--accent-soft);
+  stroke: var(--accent-outline);
+}
+
+.dg-badge-package text {
+  fill: var(--accent-soft-text);
+}
+
+/* Opacity only: a CSS transform would replace the SVG transform attribute. */
+.reveal-pending:not(.reveal-in) .dg-pop {
+  opacity: 0;
+}
+
+.reveal-in .dg-pop {
+  transition: opacity 0.45s ease-out;
+  transition-delay: calc(200ms + var(--n, 0) * 90ms);
+}
+
+@mixin dark-figures {
+  .dg-fail {
+    fill: var(--color-error-400);
+  }
+  .dg-ok {
+    fill: var(--color-success-400);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include dark-figures;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include dark-figures;
+}
