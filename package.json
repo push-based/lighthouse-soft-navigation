@@ -9,7 +9,7 @@
     "@nx/oxlint": "^24.0.0",
     "@nx/rolldown": "^24.0.0",
     "@nx/vitest": "^24.0.0",
-    "@push-based/user-flow": "0.21.4",
+    "@push-based/user-flow": "0.21.6",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",

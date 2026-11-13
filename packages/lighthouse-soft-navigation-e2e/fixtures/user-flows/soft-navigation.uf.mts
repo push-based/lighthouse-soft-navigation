@@ -3,7 +3,6 @@ import {
   createUserFlowRunner,
   type UserFlowProvider,
 } from '@push-based/user-flow';
-import puppeteer from 'puppeteer';
 
 // A soft navigation has no document request to simulate from, so it is observed.
 const observed = { throttlingMethod: 'devtools' } as const;
@@ -13,9 +12,6 @@ export default {
   launchOptions: {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    // user-flow 0.21.4 launches the Chrome 148 of its Puppeteer 24, and soft navigations need
-    // Chrome 149 or newer. This is the Chrome of the Puppeteer installed next to it.
-    executablePath: await puppeteer.executablePath(),
   },
   interactions: async (context) => {
     const { flow, page, collectOptions } = context;
