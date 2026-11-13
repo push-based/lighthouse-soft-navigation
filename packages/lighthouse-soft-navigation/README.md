@@ -83,7 +83,7 @@ Each piece stands in for a change in Lighthouse itself. See [Upstreaming to Ligh
 ## Development
 
 ```sh
-npx nx build lighthouse-soft-navigation
-npx nx test lighthouse-soft-navigation
-npx nx e2e lighthouse-soft-navigation-e2e
+pnpm nx build lighthouse-soft-navigation
+pnpm nx test lighthouse-soft-navigation
+pnpm nx e2e lighthouse-soft-navigation-e2e
 ```
