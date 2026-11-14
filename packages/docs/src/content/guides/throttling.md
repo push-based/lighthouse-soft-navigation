@@ -6,7 +6,7 @@ The package can't switch the method for you. A flow has one config for all steps
 
 ## Per step or per flow
 
-Set it on each soft navigation step, as in [Usage](/docs/getting-started/usage), or once for the whole flow:
+Set it on each soft navigation step, as the setup guides for [Lighthouse](/docs/getting-started/lighthouse) and [user-flow](/docs/getting-started/user-flow) do, or once for the whole flow:
 
 ```js
 const flow = await startFlow(page, {
@@ -16,5 +16,7 @@ const flow = await startFlow(page, {
   }),
 });
 ```
+
+With user-flow, the same config goes in `flowOptions.config`. To set it for every flow of a project, see [Settings for every flow](/docs/getting-started/user-flow#settings-for-every-flow).
 
 The flow-wide setting applies to page loads too. Those then take longer, vary more between runs and no longer compare with PageSpeed Insights or a default Lighthouse run. Set it per step when page load numbers have to compare with those.

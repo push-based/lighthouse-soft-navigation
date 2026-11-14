@@ -6,14 +6,14 @@ import { SearchOpener } from './search/search-opener';
 /** A few pages most visitors are after, offered when a link went nowhere. */
 const POPULAR = [
   {
-    path: '/docs/getting-started/usage',
-    title: 'Usage',
-    body: 'Measure your first soft navigation.',
+    path: '/docs/getting-started/lighthouse',
+    title: 'Set up with Lighthouse',
+    body: 'Measure a soft navigation in a script of your own.',
   },
   {
-    path: '/docs/guides/throttling',
-    title: 'Throttling',
-    body: 'Why soft navigations need DevTools throttling.',
+    path: '/docs/getting-started/user-flow',
+    title: 'Set up with user-flow',
+    body: 'Measure a soft navigation in a flow file.',
   },
   {
     path: '/docs/guides/limits',

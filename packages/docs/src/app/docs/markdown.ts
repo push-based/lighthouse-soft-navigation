@@ -297,7 +297,7 @@ const IMAGE_SIZES: Record<string, [number, number]> = {};
 /** The landing page's call to action, for the end of a guide. */
 function ctaBand(quickStartAttrs: string): string {
   const command = 'npm i @push-based/lighthouse-soft-navigation';
-  return `<aside class="cta-band cta-band-doc"><div class="cta-glow" aria-hidden="true"></div><svg class="brand-mark cta-mark" viewBox="0 0 1360 1360" aria-hidden="true"><use href="images/mark.svg#mark"/></svg><div class="cta-copy"><p class="cta-title">Ready to measure your route changes?</p><p class="cta-body">One config turns the soft navigations of your app into navigation steps with a Performance score.</p></div><div class="cta-actions"><button class="cta-command" type="button" data-copy="${command}" title="Copy the install command"><span class="cta-prompt" aria-hidden="true">$</span><code>${command}</code><span class="cta-copy-state" aria-live="polite">Copy</span></button><a class="pb-btn pb-btn-lg cta-btn" ${quickStartAttrs}>Read the usage guide <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></aside>\n`;
+  return `<aside class="cta-band cta-band-doc"><div class="cta-glow" aria-hidden="true"></div><svg class="brand-mark cta-mark" viewBox="0 0 1360 1360" aria-hidden="true"><use href="images/mark.svg#mark"/></svg><div class="cta-copy"><p class="cta-title">Ready to measure your route changes?</p><p class="cta-body">One config turns the soft navigations of your app into navigation steps with a Performance score.</p></div><div class="cta-actions"><button class="cta-command" type="button" data-copy="${command}" title="Copy the install command"><span class="cta-prompt" aria-hidden="true">$</span><code>${command}</code><span class="cta-copy-state" aria-live="polite">Copy</span></button><a class="pb-btn pb-btn-lg cta-btn" ${quickStartAttrs}>Set it up <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></aside>\n`;
 }
 
 /** The highlighted `<pre>` for a fenced block, plus its language and title. */
@@ -579,7 +579,9 @@ export function renderMarkdown(
         }
         // `<!-- cta -->` adds the landing page's call to action.
         if (/^<!--\s*cta\s*-->\s*$/.test(raw)) {
-          return ctaBand(linkTarget('/docs/getting-started/usage').attrs);
+          return ctaBand(
+            linkTarget('/docs/getting-started/introduction').attrs,
+          );
         }
         return false;
       },
