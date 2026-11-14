@@ -4,6 +4,8 @@ Lighthouse's default, `simulate`, estimates a throttled load from the requests t
 
 The package can't switch the method for you. A flow has one config for all steps, and the package only knows a step is a soft navigation once it runs.
 
+What Lighthouse would have to change for `simulate` to work is in [Simulated throttling for soft navigations](https://github.com/push-based/lighthouse-soft-navigation/blob/main/docs/simulated-throttling.md).
+
 ## Per step or per flow
 
 Set it on each soft navigation step, as the setup guides for [Lighthouse](/docs/getting-started/lighthouse) and [user-flow](/docs/getting-started/user-flow) do, or once for the whole flow:

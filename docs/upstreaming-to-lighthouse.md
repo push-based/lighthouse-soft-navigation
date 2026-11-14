@@ -59,6 +59,8 @@ await flow.navigate(
 The package therefore recognises a soft navigation instead of being told about one: the main frame navigates
 within the document, and no document starts loading. For the same reason it cannot switch simulated
 throttling to DevTools throttling for the step, which is why the step passes `throttlingMethod` itself.
+What simulated throttling would need to work for a soft navigation is in
+[Simulated throttling for soft navigations](simulated-throttling.md).
 
 Adding `softNavigation: false` to `defaultSettings` is the first and smallest upstream change. It is useful
 on its own: once it ships, the package can read the flag from `context.settings` and only bridge steps that
@@ -150,3 +152,6 @@ sense alone, most of them inert until the setting is used:
 - **Chrome support:** soft navigation trace events require Chrome 149+. Should Lighthouse feature-detect
   and emit a dedicated error on older Chrome?
 - **Timespans:** should a timespan that contains a soft navigation warn and point to the navigation step?
+- **Simulated throttling:** #17075 switches a soft navigation from `simulate` to `devtools`. Should Lantern
+  simulate soft navigations instead? [Simulated throttling for soft navigations](simulated-throttling.md)
+  lists what that takes.
