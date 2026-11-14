@@ -41,45 +41,89 @@ function arrow(
   return `<path class="dg-link" style="--n:${n}" pathLength="1" d="M${x1} ${y1} L${x2} ${y2}"/><path class="dg-link dg-arrowhead" style="--n:${n}" pathLength="1" d="${head}"/>`;
 }
 
-/** Two lanes: what a page load and a soft navigation go through after a click. */
-function hardVsSoft(): string {
+type Step = [title: string, note: string, kind: Kind];
+
+/** One lane of `hardVsSoft`: a label and the steps after the click. */
+interface Lane {
+  label: string;
+  note: string;
+  steps: Step[];
+}
+
+const HARD_VS_SOFT: Lane[] = [
+  {
+    label: 'Page load',
+    note: 'new document',
+    steps: [
+      ['Click', 'user input', 'plain'],
+      ['GET /products', 'document request', 'info'],
+      ['Parse, render', 'new document', 'info'],
+      ['FCP, LCP, load', 'page load events', 'success'],
+    ],
+  },
+  {
+    label: 'Soft navigation',
+    note: 'same document',
+    steps: [
+      ['Click', 'user input', 'plain'],
+      ['pushState', 'URL changes', 'accent'],
+      ['fetch /api', 'data, scripts', 'accent'],
+      ['Render the view', 'soft FCP, LCP', 'success'],
+    ],
+  },
+];
+
+/** The lanes as rows, steps running left to right. Needs about 640px to stay legible. */
+function hardVsSoftRows(lanes: Lane[]): string {
   const w = 132;
   const gap = 28;
-  const lane = (y: number, steps: [string, string, Kind][], n0: number) =>
-    steps
-      .map(([title, note, kind], i) => {
-        const x = 130 + i * (w + gap);
-        const link = i ? arrow(x - gap + 2, y + 28, x - 3, y + 28, n0 + i) : '';
-        return link + box(x, y, w, title, note, kind, n0 + i);
-      })
-      .join('');
-  return `<figure class="diagram diagram-svg" role="img" aria-label="After a click, a page load requests a new document, parses it, paints and fires the load event. A soft navigation updates the URL with pushState, fetches data and renders the new view into the same document: there is no document request and no load event.">
-<svg viewBox="0 0 770 196" class="dg-svg">
-<text class="dg-lane" x="0" y="44">Page load</text>
-<text class="dg-note" x="0" y="62">new document</text>
-${lane(
-  16,
-  [
-    ['Click', 'user input', 'plain'],
-    ['GET /products', 'document request', 'info'],
-    ['Parse, render', 'new document', 'info'],
-    ['FCP, LCP, load', 'page load events', 'success'],
-  ],
-  0,
-)}
-<text class="dg-lane" x="0" y="144">Soft navigation</text>
-<text class="dg-note" x="0" y="162">same document</text>
-${lane(
-  116,
-  [
-    ['Click', 'user input', 'plain'],
-    ['pushState', 'URL changes', 'accent'],
-    ['fetch /api', 'data, scripts', 'accent'],
-    ['Render the view', 'soft FCP, LCP', 'success'],
-  ],
-  4,
-)}
-</svg>
+  const rows = lanes.map(({ label, note, steps }, row) => {
+    const y = 16 + row * 100;
+    const boxes = steps.map(([title, stepNote, kind], i) => {
+      const x = 130 + i * (w + gap);
+      const n = row * steps.length + i;
+      const link = i ? arrow(x - gap + 2, y + 28, x - 3, y + 28, n) : '';
+      return link + box(x, y, w, title, stepNote, kind, n);
+    });
+    return `<text class="dg-lane" x="0" y="${y + 28}">${label}</text><text class="dg-note" x="0" y="${y + 46}">${note}</text>${boxes.join('')}`;
+  });
+  return `<svg viewBox="0 0 770 196" class="dg-svg dg-wide" aria-hidden="true">${rows.join('')}</svg>`;
+}
+
+/**
+ * The lanes as columns, steps running top to bottom, for narrow screens.
+ * About 312 wide, so on a phone it is drawn close to its own size and each
+ * step sits next to its counterpart in the other lane.
+ */
+function hardVsSoftColumns(lanes: Lane[]): string {
+  const w = 148;
+  const gap = 16;
+  const top = 48;
+  const step = 80;
+  const columns = lanes.map(({ label, note, steps }, col) => {
+    const x = col * (w + gap);
+    const mid = x + w / 2;
+    const boxes = steps.map(([title, stepNote, kind], i) => {
+      const y = top + i * step;
+      const n = col * steps.length + i;
+      const link = i ? arrow(mid, y - step + 59, mid, y - 3, n) : '';
+      return link + box(x, y, w, title, stepNote, kind, n);
+    });
+    return `<text class="dg-lane" x="${mid}" y="16" text-anchor="middle">${label}</text><text class="dg-note" x="${mid}" y="33" text-anchor="middle">${note}</text>${boxes.join('')}`;
+  });
+  const width = lanes.length * w + (lanes.length - 1) * gap;
+  const height = top + (lanes[0].steps.length - 1) * step + 58;
+  return `<svg viewBox="-1 0 ${width + 2} ${height}" class="dg-svg dg-narrow" aria-hidden="true">${columns.join('')}</svg>`;
+}
+
+/**
+ * Two lanes: what a page load and a soft navigation go through after a click.
+ * Drawn twice, as rows and as columns; the figure shows the one that fits.
+ */
+function hardVsSoft(): string {
+  return `<figure class="diagram diagram-svg diagram-responsive" role="img" aria-label="After a click, a page load requests a new document, parses it, paints and fires the load event. A soft navigation updates the URL with pushState, fetches data and renders the new view into the same document: there is no document request and no load event.">
+${hardVsSoftRows(HARD_VS_SOFT)}
+${hardVsSoftColumns(HARD_VS_SOFT)}
 </figure>`;
 }
 

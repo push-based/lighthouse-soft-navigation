@@ -23,6 +23,37 @@
   font-family: var(--font-mono);
 }
 
+/*
+ * Figures drawn twice, wide and narrow. Which one shows depends on the width
+ * of the figure, not the window, so a sidebar or a table of contents counts.
+ * Below 640px the wide drawing scales its 12px notes under 10px.
+ */
+.diagram-responsive {
+  container-type: inline-size;
+
+  .dg-narrow {
+    display: none;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  @container (max-width: 639.98px) {
+    .dg-wide {
+      display: none;
+    }
+
+    .dg-narrow {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: 479.98px) {
+  .diagram-responsive {
+    padding: var(--space-4) var(--space-3);
+  }
+}
+
 .dg-layer {
   fill: var(--text-heading);
   font-family: var(--font-sans);
