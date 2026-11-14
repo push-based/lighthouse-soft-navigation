@@ -10,6 +10,7 @@
 
 | Symptom                                                 | Cause and fix                                                                                                                                                                            |
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The flow fails with `Could not find Chrome`             | The package manager skipped Puppeteer's install script, which downloads Chrome. Run `npx puppeteer browsers install chrome`.                                                             |
 | The first step fails because the click finds no element | No page is loaded yet. Start the flow with `flow.navigate(url)`; a soft navigation starts from a loaded page.                                                                            |
 | The step fails with `NO_FCP`                            | Chrome didn't report a soft navigation. The interaction has to be a real input such as `page.click`, and it has to paint new content. Check that Chrome is 149 or newer.                 |
 | The metric audits error                                 | The step ran with simulated throttling. Pass `throttlingMethod: 'devtools'`.                                                                                                             |

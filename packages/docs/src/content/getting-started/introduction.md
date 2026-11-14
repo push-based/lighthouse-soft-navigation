@@ -8,3 +8,10 @@ A soft navigation is a route change that updates the URL and the content without
 
 - Lighthouse 13.6 or newer
 - Chrome 149 or newer, the first version that reports soft navigations in the trace
+
+## Two ways to set it up
+
+The package is a config, so it runs wherever a Lighthouse user flow runs. Both setups measure the same steps and give the same result.
+
+- [With Lighthouse](/docs/getting-started/lighthouse): you write a Node script that launches Chrome with Puppeteer, runs the flow and saves the report.
+- [With user-flow](/docs/getting-started/user-flow): the user-flow CLI launches Chrome, runs your flow files and writes the reports.

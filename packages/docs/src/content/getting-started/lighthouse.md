@@ -1,10 +1,12 @@
+With Lighthouse alone, you write the script that runs the flow: it launches Chrome with Puppeteer, measures the steps and saves the report. To run flow files from a CLI instead, see [Set up with user-flow](/docs/getting-started/user-flow).
+
 ## Install
 
 ```sh
-npm install @push-based/lighthouse-soft-navigation lighthouse puppeteer
+npm install --save-dev @push-based/lighthouse-soft-navigation lighthouse puppeteer
 ```
 
-## Measure a soft navigation
+## Write the flow
 
 Pass `softNavigationConfig()` to `startFlow`, load the page, then trigger the route change in a navigation step. The page load has to come first: a soft navigation starts from a page that is already loaded.
 
@@ -35,38 +37,14 @@ writeFileSync('flow.report.html', await flow.generateReport());
 await browser.close();
 ```
 
-Run it with `node flow.mjs` and open `flow.report.html`.
-
 There is no flag. A step is a soft navigation when the main frame navigates within the document and no document starts loading. Every soft navigation step needs `throttlingMethod: 'devtools'` or `'provided'`; see [Throttling](/docs/guides/throttling).
 
 `softNavigationConfig(config?)` takes any Lighthouse config, including `desktopConfig` and configs with `extends: 'lighthouse:default'`.
 
-## With user-flow
+## Run it
 
-Pass the config in `flowOptions.config` of a flow file. It can't go in `.user-flowrc.json`, which only takes JSON. Requires `@push-based/user-flow` 0.21.6 or newer.
-
-```typescript title="user-flows/checkout.uf.mts"
-import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
-import type { UserFlowProvider } from '@push-based/user-flow';
-
-export default {
-  flowOptions: { name: 'Checkout', config: softNavigationConfig() },
-  interactions: async ({ flow, page, collectOptions }) => {
-    await flow.navigate(collectOptions.url);
-    await flow.navigate(() => page.click('a.product-link'), {
-      throttlingMethod: 'devtools',
-    });
-  },
-} satisfies UserFlowProvider;
+```sh
+node flow.mjs
 ```
 
-## The result
-
-A soft navigation step is a navigation step with a Performance score. Its metrics start at the click, and its URL is the route it navigated to. Audits of the document response, like `server-response-time` or `redirects`, are not applicable.
-
-The `soft-navigation` audit tells it apart from a page load: it is `informative` for a soft navigation and `notApplicable` for a page load.
-
-```js
-const isSoft = (step) =>
-  step.lhr.audits['soft-navigation']?.scoreDisplayMode === 'informative';
-```
+Open `flow.report.html`. [Reading the result](/docs/guides/results) explains what a soft navigation step looks like in it.

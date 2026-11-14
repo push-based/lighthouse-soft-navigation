@@ -43,15 +43,22 @@ export const DOCS_NAV: DocSection[] = [
         slug: 'introduction',
         title: 'Introduction',
         description:
-          'What a soft navigation is and what the package adds to Lighthouse user flows.',
+          'What a soft navigation is, what the package adds to Lighthouse user flows and the two ways to set it up.',
         load: md(() => import('../../content/getting-started/introduction.md')),
       },
       {
-        slug: 'usage',
-        title: 'Usage',
+        slug: 'lighthouse',
+        title: 'Set up with Lighthouse',
         description:
-          'Install the package, measure a soft navigation step and read its result, with Lighthouse or user-flow.',
-        load: md(() => import('../../content/getting-started/usage.md')),
+          'Install the package and measure a soft navigation step in a Lighthouse script of your own.',
+        load: md(() => import('../../content/getting-started/lighthouse.md')),
+      },
+      {
+        slug: 'user-flow',
+        title: 'Set up with user-flow',
+        description:
+          'Install the package and measure a soft navigation step in a flow file of the user-flow CLI.',
+        load: md(() => import('../../content/getting-started/user-flow.md')),
       },
     ],
   },
@@ -59,6 +66,13 @@ export const DOCS_NAV: DocSection[] = [
     slug: 'guides',
     title: 'Guides',
     pages: [
+      {
+        slug: 'results',
+        title: 'Reading the result',
+        description:
+          'What a soft navigation step looks like in a report, and how to tell it from a page load.',
+        load: md(() => import('../../content/guides/results.md')),
+      },
       {
         slug: 'throttling',
         title: 'Throttling',
