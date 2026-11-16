@@ -1,0 +1,1320 @@
+{
+  "configurations": {
+    "stock": {},
+    "root": {
+      "root": true
+    },
+    "root+chains": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true
+    },
+    "root+chains+paint": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true
+    },
+    "root+chains+paint+warm": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true,
+      "warmConnections": true
+    },
+    "all": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true,
+      "warmConnections": true,
+      "h2Ttfb": true
+    },
+    "all+short": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true,
+      "warmConnections": true,
+      "h2Ttfb": true,
+      "keepShortTasks": true
+    },
+    "root+chains+paint+cold": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true,
+      "coldRequests": true
+    },
+    "all-but-chains": {
+      "root": true,
+      "paintGraph": true,
+      "warmConnections": true,
+      "h2Ttfb": true
+    },
+    "all-but-paint": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "warmConnections": true,
+      "h2Ttfb": true
+    },
+    "all-but-warm": {
+      "root": true,
+      "fetchChains": true,
+      "taskRequests": true,
+      "paintGraph": true,
+      "h2Ttfb": true
+    }
+  },
+  "rows": [
+    {
+      "target": "angular.dev",
+      "run": 1,
+      "reference": {
+        "fcp": 1465.876,
+        "lcp": 1465.876,
+        "si": 869,
+        "tbt": 0,
+        "tti": 1465.876
+      },
+      "observed": {
+        "fcp": 217,
+        "lcp": 217,
+        "si": 208
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 75,
+          "lcp": 75,
+          "si": 320.8417119932175,
+          "tbt": 42.5,
+          "tti": 168.55
+        },
+        "root+chains": {
+          "fcp": 1029.83905,
+          "lcp": 1029.83905,
+          "si": 1029.83905,
+          "tbt": 53,
+          "tti": 1132.83905
+        },
+        "root+chains+paint": {
+          "fcp": 1160.83905,
+          "lcp": 1160.83905,
+          "si": 1160.83905,
+          "tbt": 0,
+          "tti": 1160.83905
+        },
+        "root+chains+paint+warm": {
+          "fcp": 356,
+          "lcp": 356,
+          "si": 434.9737425885192,
+          "tbt": 0,
+          "tti": 356
+        },
+        "all": {
+          "fcp": 758.6781,
+          "lcp": 758.6781,
+          "si": 758.6781,
+          "tbt": 0,
+          "tti": 758.6781000000001
+        },
+        "all+short": {
+          "fcp": 789.6781,
+          "lcp": 789.6781,
+          "si": 789.6781,
+          "tbt": 0,
+          "tti": 789.6781000000001
+        },
+        "root+chains+paint+cold": {
+          "fcp": 1958.6781,
+          "lcp": 1958.6781,
+          "si": 1958.6781,
+          "tbt": 0,
+          "tti": 1958.6781
+        },
+        "all-but-chains": {
+          "fcp": 219.83905,
+          "lcp": 219.83905,
+          "si": 423.57894409098583,
+          "tbt": 0,
+          "tti": 219.83905
+        },
+        "all-but-paint": {
+          "fcp": 634.6781,
+          "lcp": 634.6781,
+          "si": 634.6781,
+          "tbt": 53,
+          "tti": 737.6781000000001
+        },
+        "all-but-warm": {
+          "fcp": 1358.6781,
+          "lcp": 1358.6781,
+          "si": 1358.6781,
+          "tbt": 0,
+          "tti": 1358.6781
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "angular.dev",
+      "run": 2,
+      "reference": {
+        "fcp": 1480.757,
+        "lcp": 1480.757,
+        "si": 884,
+        "tbt": 0,
+        "tti": 1480.757
+      },
+      "observed": {
+        "fcp": 140,
+        "lcp": 140,
+        "si": 162
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 68,
+          "lcp": 68,
+          "si": 254.68381605815895,
+          "tbt": 34.5,
+          "tti": 153.45000000000002
+        },
+        "root+chains": {
+          "fcp": 987.13605,
+          "lcp": 987.13605,
+          "si": 987.13605,
+          "tbt": 44.000000000000114,
+          "tti": 1081.13605
+        },
+        "root+chains+paint": {
+          "fcp": 1095.13605,
+          "lcp": 1095.13605,
+          "si": 1095.13605,
+          "tbt": 0,
+          "tti": 1095.13605
+        },
+        "root+chains+paint+warm": {
+          "fcp": 324,
+          "lcp": 324,
+          "si": 359.3070293035755,
+          "tbt": 0,
+          "tti": 324
+        },
+        "all": {
+          "fcp": 666.2721,
+          "lcp": 666.2721,
+          "si": 666.2721,
+          "tbt": 0,
+          "tti": 666.2721000000001
+        },
+        "all+short": {
+          "fcp": 700.2721,
+          "lcp": 700.2721,
+          "si": 700.2721,
+          "tbt": 0,
+          "tti": 700.2721000000001
+        },
+        "root+chains+paint+cold": {
+          "fcp": 1866.2721,
+          "lcp": 1866.2721,
+          "si": 1866.2721,
+          "tbt": 0,
+          "tti": 1866.2721000000001
+        },
+        "all-but-chains": {
+          "fcp": 184.13605,
+          "lcp": 184.13605,
+          "si": 340.8608641706403,
+          "tbt": 0,
+          "tti": 184.13605
+        },
+        "all-but-paint": {
+          "fcp": 558.2721,
+          "lcp": 558.2721,
+          "si": 558.2721,
+          "tbt": 44,
+          "tti": 652.2721
+        },
+        "all-but-warm": {
+          "fcp": 1266.2721,
+          "lcp": 1266.2721,
+          "si": 1266.2721,
+          "tbt": 0,
+          "tti": 1266.2721000000001
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "angular.dev",
+      "run": 3,
+      "reference": {
+        "fcp": 1466.068,
+        "lcp": 1466.068,
+        "si": 877,
+        "tbt": 0,
+        "tti": 1466.068
+      },
+      "observed": {
+        "fcp": 123,
+        "lcp": 123,
+        "si": 147
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 64,
+          "lcp": 64,
+          "si": 246.87611161048628,
+          "tbt": 36,
+          "tti": 150.9
+        },
+        "root+chains": {
+          "fcp": 977.74145,
+          "lcp": 977.74145,
+          "si": 977.74145,
+          "tbt": 45,
+          "tti": 1072.74145
+        },
+        "root+chains+paint": {
+          "fcp": 1085.74145,
+          "lcp": 1085.74145,
+          "si": 1085.74145,
+          "tbt": 0,
+          "tti": 1085.74145
+        },
+        "root+chains+paint+warm": {
+          "fcp": 322,
+          "lcp": 322,
+          "si": 338.638263531823,
+          "tbt": 0,
+          "tti": 322
+        },
+        "all": {
+          "fcp": 649.4829,
+          "lcp": 649.4829,
+          "si": 649.4829,
+          "tbt": 0,
+          "tti": 649.4829
+        },
+        "all+short": {
+          "fcp": 680.4829,
+          "lcp": 680.4829,
+          "si": 680.4829,
+          "tbt": 0,
+          "tti": 680.4829
+        },
+        "root+chains+paint+cold": {
+          "fcp": 1849.4829,
+          "lcp": 1849.4829,
+          "si": 1849.4829,
+          "tbt": 0,
+          "tti": 1849.4829
+        },
+        "all-but-chains": {
+          "fcp": 175.74145,
+          "lcp": 175.74145,
+          "si": 313.32788492903006,
+          "tbt": 0,
+          "tti": 175.74145
+        },
+        "all-but-paint": {
+          "fcp": 541.4829,
+          "lcp": 541.4829,
+          "si": 541.4829,
+          "tbt": 45,
+          "tti": 636.4829
+        },
+        "all-but-warm": {
+          "fcp": 1249.4829,
+          "lcp": 1249.4829,
+          "si": 1249.4829,
+          "tbt": 0,
+          "tti": 1249.4829
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "react.dev",
+      "run": 1,
+      "reference": {
+        "fcp": 191.929,
+        "lcp": 191.929,
+        "si": 80,
+        "tbt": 47.873999999999796,
+        "tti": 1161.1
+      },
+      "observed": {
+        "fcp": 73,
+        "lcp": 73,
+        "si": 31
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 134,
+          "lcp": 134,
+          "si": 134,
+          "tbt": 67,
+          "tti": 1229.2529
+        },
+        "root+chains": {
+          "fcp": 134,
+          "lcp": 134,
+          "si": 134,
+          "tbt": 67,
+          "tti": 1233.2529
+        },
+        "root+chains+paint": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 237.7753998834075,
+          "tbt": 67,
+          "tti": 1233.2529
+        },
+        "root+chains+paint+warm": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 167,
+          "tbt": 67,
+          "tti": 573
+        },
+        "all": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 177.74612917530905,
+          "tbt": 67,
+          "tti": 779.2529
+        },
+        "all+short": {
+          "fcp": 215,
+          "lcp": 215,
+          "si": 215,
+          "tbt": 55.5,
+          "tti": 791.9029
+        },
+        "root+chains+paint+cold": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 566.26545209968,
+          "tbt": 66.99999999999955,
+          "tti": 4154.264499999999
+        },
+        "all-but-chains": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 177.74612917530905,
+          "tbt": 67,
+          "tti": 779.2529
+        },
+        "all-but-paint": {
+          "fcp": 134,
+          "lcp": 134,
+          "si": 134,
+          "tbt": 67,
+          "tti": 779.2529
+        },
+        "all-but-warm": {
+          "fcp": 167,
+          "lcp": 167,
+          "si": 237.7753998834075,
+          "tbt": 67,
+          "tti": 1233.2529
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "react.dev",
+      "run": 2,
+      "reference": {
+        "fcp": 170.411,
+        "lcp": 170.411,
+        "si": 71,
+        "tbt": 49.077999999999975,
+        "tti": 1155.917
+      },
+      "observed": {
+        "fcp": 82,
+        "lcp": 82,
+        "si": 53
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 165,
+          "lcp": 165,
+          "si": 165,
+          "tbt": 128,
+          "tti": 1288.1397000000002
+        },
+        "root+chains": {
+          "fcp": 165,
+          "lcp": 165,
+          "si": 165,
+          "tbt": 128,
+          "tti": 1292.1397
+        },
+        "root+chains+paint": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 288.4416560956058,
+          "tbt": 128,
+          "tti": 1292.1397
+        },
+        "root+chains+paint+warm": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 197,
+          "tbt": 128,
+          "tti": 628
+        },
+        "all": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 220.85345753117406,
+          "tbt": 128,
+          "tti": 838.1397
+        },
+        "all+short": {
+          "fcp": 252,
+          "lcp": 252,
+          "si": 252,
+          "tbt": 128,
+          "tti": 845.1397
+        },
+        "root+chains+paint+cold": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 622.5647660067602,
+          "tbt": 128,
+          "tti": 4228.6984999999995
+        },
+        "all-but-chains": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 217.64435781388613,
+          "tbt": 128,
+          "tti": 838.1397
+        },
+        "all-but-paint": {
+          "fcp": 165,
+          "lcp": 165,
+          "si": 165,
+          "tbt": 128,
+          "tti": 838.1397
+        },
+        "all-but-warm": {
+          "fcp": 197,
+          "lcp": 197,
+          "si": 288.4416560956058,
+          "tbt": 128,
+          "tti": 1292.1397
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "react.dev",
+      "run": 3,
+      "reference": {
+        "fcp": 165.226,
+        "lcp": 165.226,
+        "si": 69,
+        "tbt": 58.44900000000007,
+        "tti": 1158.586
+      },
+      "observed": {
+        "fcp": 65,
+        "lcp": 65,
+        "si": 30
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 98,
+          "lcp": 98,
+          "si": 98,
+          "tbt": 122,
+          "tti": 1265.8506000000002
+        },
+        "root+chains": {
+          "fcp": 98,
+          "lcp": 98,
+          "si": 98,
+          "tbt": 122,
+          "tti": 1269.8506000000002
+        },
+        "root+chains+paint": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 219.31848052967584,
+          "tbt": 122,
+          "tti": 1269.8506000000002
+        },
+        "root+chains+paint+warm": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 134.8435595856569,
+          "tbt": 122,
+          "tti": 629
+        },
+        "all": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 157.40631962455714,
+          "tbt": 122,
+          "tti": 815.8506
+        },
+        "all+short": {
+          "fcp": 193.8506,
+          "lcp": 193.8506,
+          "si": 193.8506,
+          "tbt": 111,
+          "tti": 827.9506
+        },
+        "root+chains+paint+cold": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 493.7215135373205,
+          "tbt": 122,
+          "tti": 4113.253
+        },
+        "all-but-chains": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 151.16260592263356,
+          "tbt": 122,
+          "tti": 815.8506
+        },
+        "all-but-paint": {
+          "fcp": 98,
+          "lcp": 98,
+          "si": 98,
+          "tbt": 122,
+          "tti": 815.8506
+        },
+        "all-but-warm": {
+          "fcp": 131,
+          "lcp": 131,
+          "si": 219.31848052967584,
+          "tbt": 122,
+          "tti": 1269.8506000000002
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "svelte.dev",
+      "run": 1,
+      "reference": {
+        "fcp": 620.368,
+        "lcp": 620.368,
+        "si": 426,
+        "tbt": 20.062999999999647,
+        "tti": 2703.901
+      },
+      "observed": {
+        "fcp": 87,
+        "lcp": 87,
+        "si": 74
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 49,
+          "lcp": 49,
+          "si": 123.66158000373838,
+          "tbt": 10,
+          "tti": 584.271605
+        },
+        "root+chains": {
+          "fcp": 49,
+          "lcp": 49,
+          "si": 123.66158000373838,
+          "tbt": 10,
+          "tti": 1244.271605
+        },
+        "root+chains+paint": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 1246.0716049999999
+        },
+        "root+chains+paint+warm": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 804.8500000000001
+        },
+        "all": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 1109.79321
+        },
+        "all+short": {
+          "fcp": 368.2211,
+          "lcp": 368.2211,
+          "si": 368.2211,
+          "tbt": 10,
+          "tti": 1260.4427050000002
+        },
+        "root+chains+paint+cold": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 5769.509260000002
+        },
+        "all-but-chains": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 449.79321000000004
+        },
+        "all-but-paint": {
+          "fcp": 49,
+          "lcp": 49,
+          "si": 123.66158000373838,
+          "tbt": 10,
+          "tti": 1107.99321
+        },
+        "all-but-warm": {
+          "fcp": 53,
+          "lcp": 53,
+          "si": 125.26158000373839,
+          "tbt": 10,
+          "tti": 1468.5148150000002
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "svelte.dev",
+      "run": 2,
+      "reference": {
+        "fcp": 634.159,
+        "lcp": 634.159,
+        "si": 438,
+        "tbt": 22.17599999999993,
+        "tti": 2711.975000061035
+      },
+      "observed": {
+        "fcp": 70,
+        "lcp": 70,
+        "si": 63
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 44,
+          "lcp": 44,
+          "si": 105.38512395071984,
+          "tbt": 9.5,
+          "tti": 577.29881
+        },
+        "root+chains": {
+          "fcp": 797.6342,
+          "lcp": 797.6342,
+          "si": 797.6342,
+          "tbt": 9.5,
+          "tti": 1576.4342000000001
+        },
+        "root+chains+paint": {
+          "fcp": 805.6342,
+          "lcp": 805.6342,
+          "si": 805.6342,
+          "tbt": 9.5,
+          "tti": 1580.0342
+        },
+        "root+chains+paint+warm": {
+          "fcp": 161,
+          "lcp": 161,
+          "si": 161,
+          "tbt": 9.5,
+          "tti": 852.9000000000001
+        },
+        "all": {
+          "fcp": 355.63419999999996,
+          "lcp": 355.63419999999996,
+          "si": 355.63419999999996,
+          "tbt": 9.5,
+          "tti": 1237.08301
+        },
+        "all+short": {
+          "fcp": 364.63419999999996,
+          "lcp": 364.63419999999996,
+          "si": 364.63419999999996,
+          "tbt": 9.5,
+          "tti": 1249.38301
+        },
+        "root+chains+paint+cold": {
+          "fcp": 1600.2684,
+          "lcp": 1600.2684,
+          "si": 1600.2684,
+          "tbt": 9.5,
+          "tti": 6415.156500000002
+        },
+        "all-but-chains": {
+          "fcp": 47,
+          "lcp": 47,
+          "si": 106.58512395071983,
+          "tbt": 9.5,
+          "tti": 438.19762
+        },
+        "all-but-paint": {
+          "fcp": 347.63419999999996,
+          "lcp": 347.63419999999996,
+          "si": 347.63419999999996,
+          "tbt": 9.5,
+          "tti": 1233.48301
+        },
+        "all-but-warm": {
+          "fcp": 1000.2683999999999,
+          "lcp": 1000.2683999999999,
+          "si": 1000.2683999999999,
+          "tbt": 9.5,
+          "tti": 1881.71721
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "svelte.dev",
+      "run": 3,
+      "reference": {
+        "fcp": 635.419,
+        "lcp": 635.419,
+        "si": 435,
+        "tbt": 23.840000000000146,
+        "tti": 2718.817
+      },
+      "observed": {
+        "fcp": 106,
+        "lcp": 106,
+        "si": 87
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 54,
+          "lcp": 54,
+          "si": 143.99936801719664,
+          "tbt": 35,
+          "tti": 1067.6524
+        },
+        "root+chains": {
+          "fcp": 54,
+          "lcp": 54,
+          "si": 253.57739177905833,
+          "tbt": 35,
+          "tti": 2267.6524
+        },
+        "root+chains+paint": {
+          "fcp": 842.6524,
+          "lcp": 842.6524,
+          "si": 842.6524,
+          "tbt": 35,
+          "tti": 2267.6524
+        },
+        "root+chains+paint+warm": {
+          "fcp": 162,
+          "lcp": 162,
+          "si": 187.19936801719666,
+          "tbt": 35,
+          "tti": 1437
+        },
+        "all": {
+          "fcp": 390.6524,
+          "lcp": 390.6524,
+          "si": 390.6524,
+          "tbt": 35,
+          "tti": 2048.3048
+        },
+        "all+short": {
+          "fcp": 399.6524,
+          "lcp": 399.6524,
+          "si": 399.6524,
+          "tbt": 30.5,
+          "tti": 2060.2547999999997
+        },
+        "root+chains+paint+cold": {
+          "fcp": 1671.3048,
+          "lcp": 1671.3048,
+          "si": 1671.3048,
+          "tbt": 35,
+          "tti": 10804.828799999996
+        },
+        "all-but-chains": {
+          "fcp": 234.6524,
+          "lcp": 234.6524,
+          "si": 234.6524,
+          "tbt": 35,
+          "tti": 848.3048000000001
+        },
+        "all-but-paint": {
+          "fcp": 54,
+          "lcp": 54,
+          "si": 190.8939108758821,
+          "tbt": 35,
+          "tti": 2048.3048
+        },
+        "all-but-warm": {
+          "fcp": 1071.3048,
+          "lcp": 1071.3048,
+          "si": 1071.3048,
+          "tbt": 35,
+          "tti": 2728.9572
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "vite.dev",
+      "run": 1,
+      "reference": {
+        "fcp": 260.449,
+        "lcp": 260.449,
+        "si": 38,
+        "tbt": 0,
+        "tti": 260.449
+      },
+      "observed": {
+        "fcp": 98,
+        "lcp": 98,
+        "si": 13
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 3.6865921020507812,
+          "tti": 153.85000000000002
+        },
+        "root+chains": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 9,
+          "tti": 160.82870483398438
+        },
+        "root+chains+paint": {
+          "fcp": 160.82870483398438,
+          "lcp": 160.82870483398438,
+          "si": 160.82870483398438,
+          "tbt": 0,
+          "tti": 162.57291717529296
+        },
+        "root+chains+paint+warm": {
+          "fcp": 160.82870483398438,
+          "lcp": 160.82870483398438,
+          "si": 160.82870483398438,
+          "tbt": 0,
+          "tti": 162.57291717529296
+        },
+        "all": {
+          "fcp": 160.82870483398438,
+          "lcp": 160.82870483398438,
+          "si": 160.82870483398438,
+          "tbt": 0,
+          "tti": 162.57291717529296
+        },
+        "all+short": {
+          "fcp": 909.3969000000001,
+          "lcp": 909.3969000000001,
+          "si": 909.3969000000001,
+          "tbt": 0,
+          "tti": 909.3969000000001
+        },
+        "root+chains+paint+cold": {
+          "fcp": 160.82870483398438,
+          "lcp": 160.82870483398438,
+          "si": 160.82870483398438,
+          "tbt": 0,
+          "tti": 162.57291717529296
+        },
+        "all-but-chains": {
+          "fcp": 158,
+          "lcp": 158,
+          "si": 158,
+          "tbt": 0,
+          "tti": 158
+        },
+        "all-but-paint": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 9,
+          "tti": 160.82870483398438
+        },
+        "all-but-warm": {
+          "fcp": 160.82870483398438,
+          "lcp": 160.82870483398438,
+          "si": 160.82870483398438,
+          "tbt": 0,
+          "tti": 162.57291717529296
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "vite.dev",
+      "run": 2,
+      "reference": {
+        "fcp": 275.992,
+        "lcp": 275.992,
+        "si": 38,
+        "tbt": 0,
+        "tti": 275.992
+      },
+      "observed": {
+        "fcp": 98,
+        "lcp": 98,
+        "si": 15
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 0,
+          "tti": 144.3
+        },
+        "root+chains": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 0,
+          "tti": 99.81340789794922
+        },
+        "root+chains+paint": {
+          "fcp": 151.82870483398438,
+          "lcp": 151.82870483398438,
+          "si": 151.82870483398438,
+          "tbt": 0,
+          "tti": 151.82870483398438
+        },
+        "root+chains+paint+warm": {
+          "fcp": 151.82870483398438,
+          "lcp": 151.82870483398438,
+          "si": 151.82870483398438,
+          "tbt": 0,
+          "tti": 151.82870483398438
+        },
+        "all": {
+          "fcp": 151.82870483398438,
+          "lcp": 151.82870483398438,
+          "si": 151.82870483398438,
+          "tbt": 0,
+          "tti": 151.82870483398438
+        },
+        "all+short": {
+          "fcp": 901.8015799999998,
+          "lcp": 901.8015799999998,
+          "si": 901.8015799999998,
+          "tbt": 0,
+          "tti": 901.8015799999998
+        },
+        "root+chains+paint+cold": {
+          "fcp": 151.82870483398438,
+          "lcp": 151.82870483398438,
+          "si": 151.82870483398438,
+          "tbt": 0,
+          "tti": 151.82870483398438
+        },
+        "all-but-chains": {
+          "fcp": 149,
+          "lcp": 149,
+          "si": 149,
+          "tbt": 0,
+          "tti": 149
+        },
+        "all-but-paint": {
+          "fcp": 99.81340789794922,
+          "lcp": 99.81340789794922,
+          "si": 99.81340789794922,
+          "tbt": 0,
+          "tti": 99.81340789794922
+        },
+        "all-but-warm": {
+          "fcp": 151.82870483398438,
+          "lcp": 151.82870483398438,
+          "si": 151.82870483398438,
+          "tbt": 0,
+          "tti": 151.82870483398438
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    },
+    {
+      "target": "vite.dev",
+      "run": 3,
+      "reference": {
+        "fcp": 292.316,
+        "lcp": 292.316,
+        "si": 40,
+        "tbt": 0,
+        "tti": 292.316
+      },
+      "observed": {
+        "fcp": 111,
+        "lcp": 111,
+        "si": 19
+      },
+      "lantern": {
+        "stock": {
+          "fcp": null,
+          "lcp": null,
+          "si": null,
+          "tbt": null,
+          "tti": null
+        },
+        "root": {
+          "fcp": 110.81340789794922,
+          "lcp": 110.81340789794922,
+          "si": 110.81340789794922,
+          "tbt": 0.09329605102539062,
+          "tti": 158.3
+        },
+        "root+chains": {
+          "fcp": 110.81340789794922,
+          "lcp": 110.81340789794922,
+          "si": 110.81340789794922,
+          "tbt": 3,
+          "tti": 165.82870483398438
+        },
+        "root+chains+paint": {
+          "fcp": 166.01529693603516,
+          "lcp": 166.01529693603516,
+          "si": 166.01529693603516,
+          "tbt": 0,
+          "tti": 168.75688362121582
+        },
+        "root+chains+paint+warm": {
+          "fcp": 166.01529693603516,
+          "lcp": 166.01529693603516,
+          "si": 166.01529693603516,
+          "tbt": 0,
+          "tti": 168.75688362121582
+        },
+        "all": {
+          "fcp": 166.01529693603516,
+          "lcp": 166.01529693603516,
+          "si": 166.01529693603516,
+          "tbt": 0,
+          "tti": 168.75688362121582
+        },
+        "all+short": {
+          "fcp": 917.1985,
+          "lcp": 917.1985,
+          "si": 917.1985,
+          "tbt": 0,
+          "tti": 917.1985
+        },
+        "root+chains+paint+cold": {
+          "fcp": 166.01529693603516,
+          "lcp": 166.01529693603516,
+          "si": 166.01529693603516,
+          "tbt": 0,
+          "tti": 168.75688362121582
+        },
+        "all-but-chains": {
+          "fcp": 164,
+          "lcp": 164,
+          "si": 164,
+          "tbt": 0,
+          "tti": 164
+        },
+        "all-but-paint": {
+          "fcp": 110.81340789794922,
+          "lcp": 110.81340789794922,
+          "si": 110.81340789794922,
+          "tbt": 3,
+          "tti": 165.82870483398438
+        },
+        "all-but-warm": {
+          "fcp": 166.01529693603516,
+          "lcp": 166.01529693603516,
+          "si": 166.01529693603516,
+          "tbt": 0,
+          "tti": 168.75688362121582
+        }
+      },
+      "errors": {
+        "stock": {
+          "fcp": "rootRequest not found",
+          "lcp": "rootRequest not found",
+          "si": "rootRequest not found",
+          "tbt": "rootRequest not found",
+          "tti": "rootRequest not found"
+        }
+      }
+    }
+  ]
+}

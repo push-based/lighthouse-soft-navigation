@@ -131,6 +131,12 @@ with a wrong number. Going further means carrying Lantern's graph rules in the p
 them. The options and their trade-offs are in
 [#23](https://github.com/push-based/lighthouse-soft-navigation/issues/23).
 
+A spike prototypes the changes and measures them against DevTools throttling, on a fixture and four public
+sites: [`packages/simulated-throttling-spike`](../packages/simulated-throttling-spike/README.md). In short,
+changes 1 to 3 hold and are needed together, with two additions: the pruning of short tasks in `linkCPUNodes`
+has to wait for the new links, and the paint graph has to include every task that ran before the paint.
+Change 4 makes the result worse against DevTools throttling, which adds the same latency to every request.
+
 ## Limits of the measurement
 
 - One app, with two requests and almost no script. It shows that the three rules apply, not how large their

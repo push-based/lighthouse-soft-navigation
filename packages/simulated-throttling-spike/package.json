@@ -1,0 +1,29 @@
+{
+  "name": "@push-based/simulated-throttling-spike",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@push-based/lighthouse-soft-navigation": "workspace:*"
+  },
+  "nx": {
+    "name": "simulated-throttling-spike",
+    "targets": {
+      "record": {
+        "command": "node src/record.mjs",
+        "options": {
+          "cwd": "{projectRoot}"
+        },
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "evaluate": {
+        "command": "node src/evaluate.mjs",
+        "options": {
+          "cwd": "{projectRoot}"
+        }
+      }
+    }
+  }
+}
