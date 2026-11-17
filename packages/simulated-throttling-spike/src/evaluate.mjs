@@ -21,6 +21,7 @@ import { METRICS, RECORDINGS, RESULTS } from './paths.mjs';
  * compares each metric with the same soft navigation under DevTools throttling.
  *
  * Usage: node evaluate.mjs [--set fixture|real-apps] [--only sequential,image]
+ *   [--configurations root,all]
  *
  * Writes `results/<set>.json` with every value, and prints a summary.
  */
@@ -35,6 +36,14 @@ const { values } = parseArgs({
 const only = values.only?.split(',');
 const configurations =
   values.configurations?.split(',') ?? Object.keys(CONFIGURATIONS);
+const unknown = configurations.filter(
+  (name) => !Object.hasOwn(CONFIGURATIONS, name),
+);
+if (unknown.length) {
+  throw new Error(
+    `Unknown configuration ${unknown.join(', ')}. Known: ${Object.keys(CONFIGURATIONS).join(', ')}`,
+  );
+}
 
 const LANTERN = {
   fcp: LanternFirstContentfulPaint,

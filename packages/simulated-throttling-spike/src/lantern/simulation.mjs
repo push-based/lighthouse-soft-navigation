@@ -9,7 +9,7 @@ import { isSoftNavigationGraph } from './graph.mjs';
  * graph of a soft navigation.
  */
 
-const { Simulator, TCPConnection } = Lantern.Simulation;
+const { Simulator } = Lantern.Simulation;
 const { NetworkAnalyzer } = Lantern.Core;
 const { BaseNode } = Lantern.Graph;
 
@@ -71,7 +71,6 @@ export function installSimulation(flags) {
     Simulator.prototype.estimateNetworkTimeRemaining;
   const updateProgressMadeInTimePeriod =
     Simulator.prototype.updateProgressMadeInTimePeriod;
-  const simulateDownloadUntil = TCPConnection.prototype.simulateDownloadUntil;
 
   Simulator.prototype.initializeConnectionPool = function (graph) {
     initializeConnectionPool.call(this, graph);
@@ -118,10 +117,21 @@ export function installSimulation(flags) {
     }
   };
 
-  /** Tells the connection whether the request it simulates next pays a time to first byte. */
-  function withTtfbOf(simulator, node, run) {
+  /**
+   * Runs a step of the simulation of a request that has to pay a time to first byte. On a warm
+   * multiplexed connection, the request is simulated like one on a warm connection that is not
+   * multiplexed: one round trip and the server's response time.
+   *
+   * The connection is not multiplexed for the whole step, not only for the download. The step
+   * also reads the bytes the previous request on the connection downloaded beyond its own, and
+   * counts them toward this one. A request sent after the previous response gets none of them.
+   *
+   * @param {{ overwritesOverflow: boolean }} options Whether the step stores the bytes it
+   *   downloaded beyond the request, which a step that is not multiplexed stores as none.
+   */
+  function asSerialRequest(simulator, node, run, { overwritesOverflow }) {
     const charge = simulator.softNavigationTtfb?.get(node.request);
-    if (charge === undefined) return run();
+    if (!charge || node.isConnectionless) return run();
     let connection;
     try {
       connection = simulator.connectionPool.acquireActiveConnectionFromRequest(
@@ -130,17 +140,22 @@ export function installSimulation(flags) {
     } catch {
       return run();
     }
-    connection.chargeTtfbWhenWarm = charge;
+    if (!(connection.warmed && connection.multiplexed)) return run();
+    connection.multiplexed = false;
     try {
       return run();
     } finally {
-      connection.chargeTtfbWhenWarm = undefined;
+      connection.multiplexed = true;
+      if (overwritesOverflow) connection.h2OverflowBytesDownloaded = 0;
     }
   }
 
   Simulator.prototype.estimateNetworkTimeRemaining = function (node) {
-    return withTtfbOf(this, node, () =>
-      estimateNetworkTimeRemaining.call(this, node),
+    return asSerialRequest(
+      this,
+      node,
+      () => estimateNetworkTimeRemaining.call(this, node),
+      { overwritesOverflow: false },
     );
   };
   Simulator.prototype.updateProgressMadeInTimePeriod = function (
@@ -156,30 +171,16 @@ export function installSimulation(flags) {
         node.request,
       );
     }
-    const result = withTtfbOf(this, node, () =>
-      updateProgressMadeInTimePeriod.call(this, node, ...rest),
+    const result = asSerialRequest(
+      this,
+      node,
+      () => updateProgressMadeInTimePeriod.call(this, node, ...rest),
+      { overwritesOverflow: true },
     );
     // The simulator warms a connection when a request on it finishes. DevTools throttling adds
     // the same latency to every request, warm connection or not, which this mimics.
     connection?.setWarmed(false);
     return result;
-  };
-
-  // A warm multiplexed connection that has to pay a time to first byte is simulated like a warm
-  // connection that is not multiplexed: one round trip and the server's response time.
-  TCPConnection.prototype.simulateDownloadUntil = function (
-    bytesToDownload,
-    options,
-  ) {
-    if (!(this.chargeTtfbWhenWarm && this.warmed && this.multiplexed)) {
-      return simulateDownloadUntil.call(this, bytesToDownload, options);
-    }
-    this.multiplexed = false;
-    try {
-      return simulateDownloadUntil.call(this, bytesToDownload, options);
-    } finally {
-      this.multiplexed = true;
-    }
   };
 
   return () => {
@@ -188,6 +189,5 @@ export function installSimulation(flags) {
       estimateNetworkTimeRemaining;
     Simulator.prototype.updateProgressMadeInTimePeriod =
       updateProgressMadeInTimePeriod;
-    TCPConnection.prototype.simulateDownloadUntil = simulateDownloadUntil;
   };
 }

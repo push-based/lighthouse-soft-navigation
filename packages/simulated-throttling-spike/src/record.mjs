@@ -5,7 +5,7 @@ import { startFlow } from 'lighthouse';
 import puppeteer from 'puppeteer';
 import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 import { SCENARIOS, startApp } from './app/server.mjs';
-import { installLanternChanges } from './lantern/install.mjs';
+import { CONFIGURATIONS, installLanternChanges } from './lantern/install.mjs';
 import { REAL_APPS } from './real-apps.mjs';
 import { METRICS, RECORDINGS } from './paths.mjs';
 
@@ -32,7 +32,8 @@ const { values } = parseArgs({
 const runs = Number(values.runs);
 const only = values.only?.split(',');
 
-installLanternChanges();
+// Every change, so that the audits of the step can be compared with `evaluate.mjs` for `all`.
+installLanternChanges(CONFIGURATIONS.all);
 
 const app = values.real ? undefined : await startApp();
 const targets = (

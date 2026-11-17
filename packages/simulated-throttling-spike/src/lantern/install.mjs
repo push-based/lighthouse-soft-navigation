@@ -6,7 +6,7 @@ import { installSimulation } from './simulation.mjs';
  * The changes of `docs/simulated-throttling.md`, each switchable, so that its effect can be measured
  * on its own:
  *
- * - `root` (change 1): the graph starts at the task of the interaction.
+ * - `root` (change 1): the graph starts at the input of the soft navigation.
  * - `fetchChains` (change 3): a task that continues after a `fetch` depends on it.
  * - `taskRequests` (change 3): a request of any type depends on the task that sent it.
  * - `paintGraph` (change 2): a paint depends on the task that changed the view, and the FCP and LCP

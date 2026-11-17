@@ -22,8 +22,14 @@ const { values } = parseArgs({
 const { rows } = JSON.parse(
   readFileSync(join(RESULTS, `${values.set}.json`), 'utf8'),
 );
-const configurations =
-  values.configurations?.split(',') ?? Object.keys(rows[0]?.lantern ?? {});
+const evaluated = Object.keys(rows[0]?.lantern ?? {});
+const configurations = values.configurations?.split(',') ?? evaluated;
+const unknown = configurations.filter((name) => !evaluated.includes(name));
+if (unknown.length) {
+  throw new Error(
+    `${values.set}.json has no configuration ${unknown.join(', ')}. It has: ${evaluated.join(', ')}`,
+  );
+}
 
 const lines = [
   `# Results: ${values.set}`,
@@ -36,7 +42,7 @@ const lines = [
   '',
   'Every configuration, over every run of every target. The tables per target below show the main ones.',
   '',
-  summarize(rows, Object.keys(rows[0]?.lantern ?? {})),
+  summarize(rows, evaluated),
   '',
 ];
 
@@ -60,15 +66,18 @@ for (const target of new Set(rows.map((row) => row.target))) {
     const lantern = medians(
       runs.map((run) => run.lantern[configuration] ?? {}),
     );
-    const failed = runs.find((run) => run.errors[configuration]);
     lines.push(
       `| Lantern, ${configuration} | ${METRICS.map(({ id }) => {
-        if (lantern[id] === null) {
-          return failed?.errors[configuration]?.[id]
-            ? `\`${failed.errors[configuration][id]}\``
-            : '—';
-        }
-        return `${ms(lantern[id])}${relative(lantern[id], reference[id])}`;
+        // The median is over the runs that computed a value, so the runs that did not are
+        // counted next to it.
+        const errors = runs
+          .filter((run) => typeof run.lantern[configuration]?.[id] !== 'number')
+          .map((run) => run.errors[configuration]?.[id] ?? 'no value');
+        const failed = errors.length
+          ? `${errors.length} of ${runs.length} failed: ${[...new Set(errors)].map((error) => `\`${error}\``).join(', ')}`
+          : '';
+        if (lantern[id] === null) return failed;
+        return `${ms(lantern[id])}${relative(lantern[id], reference[id])}${failed ? ` (${failed})` : ''}`;
       }).join(' | ')} |`,
     );
   }

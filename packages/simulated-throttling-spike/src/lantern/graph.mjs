@@ -97,11 +97,14 @@ function linkNetworkNodes(rootNode, networkNodeOutput) {
 }
 
 /**
- * Change 1: the graph of a soft navigation, rooted at the task of the interaction.
+ * Change 1: the graph of a soft navigation, rooted at the input that started it.
  *
- * The root is the first task that was still running at `SoftNavigationStart`, which is the task
- * that handled the click. Requests and tasks from before it belong to the page load and are left
- * out. There is no main document request.
+ * The root is the first task that was still running at `SoftNavigationStart`, which Chrome sets to
+ * the time of the input. In every recording of the spike that is a task of a few µs, up to 2 ms,
+ * that ran as the input arrived, not the task that dispatched the click. That one starts up to
+ * 2 ms later and is usually under 10 ms, so it is pruned, and what it started depends on the root
+ * instead. Requests and tasks from before the root belong to the page load and are left out.
+ * There is no main document request.
  *
  * @param {Array<object>} mainThreadEvents
  * @param {Array<object>} networkRequests Lantern network requests.

@@ -9,16 +9,16 @@ Every configuration, over every run of every target. The tables per target below
 | Configuration          | FCP, median abs. error | LCP, median abs. error | FCP and LCP within 20 % | Speed Index, median abs. error | TTI, median abs. error |
 | ---------------------- | ---------------------: | ---------------------: | ----------------------: | -----------------------------: | ---------------------: |
 | stock                  |                  error |                  error |                     0 % |                          error |                  error |
-| root                   |                   78 % |                   78 % |                     8 % |                           72 % |                   54 % |
-| root+chains            |                   37 % |                   37 % |                     8 % |                           69 % |                   27 % |
-| root+chains+paint      |                   27 % |                   27 % |                    17 % |                          145 % |                   26 % |
-| root+chains+paint+warm |                   60 % |                   60 % |                    17 % |                           83 % |                   49 % |
-| all                    |                   44 % |                   44 % |                    17 % |                           96 % |                   44 % |
-| all+short              |                   47 % |                   47 % |                    17 % |                           96 % |                   53 % |
-| root+chains+paint+cold |                   36 % |                   36 % |                    17 % |                          292 % |                   79 % |
-| all-but-chains         |                   55 % |                   55 % |                    17 % |                           97 % |                   57 % |
-| all-but-paint          |                   62 % |                   62 % |                     8 % |                           62 % |                   46 % |
-| all-but-warm           |                   29 % |                   29 % |                    42 % |                          172 % |                   15 % |
+| root                   |                   78 % |                   78 % |                     0 % |                           76 % |                   63 % |
+| root+chains            |                   41 % |                   41 % |                     0 % |                           49 % |                   36 % |
+| root+chains+paint      |                   28 % |                   28 % |                     0 % |                          143 % |                   36 % |
+| root+chains+paint+warm |                   60 % |                   60 % |                     0 % |                           75 % |                   57 % |
+| all                    |                   44 % |                   44 % |                     0 % |                           91 % |                   49 % |
+| all+short              |                   49 % |                   49 % |                    25 % |                           90 % |                   54 % |
+| root+chains+paint+cold |                   28 % |                   28 % |                     8 % |                          278 % |                   83 % |
+| all-but-chains         |                   67 % |                   67 % |                     0 % |                           98 % |                   65 % |
+| all-but-paint          |                   62 % |                   62 % |                     0 % |                           41 % |                   57 % |
+| all-but-warm           |                   26 % |                   26 % |                    17 % |                          167 % |                   25 % |
 
 ## angular.dev
 
@@ -26,14 +26,14 @@ Every configuration, over every run of every target. The tables per target below
 
 |                                 |          FCP |          LCP |            SI | TBT |          TTI |
 | ------------------------------- | -----------: | -----------: | ------------: | --: | -----------: |
-| DevTools throttling             |         1466 |         1466 |           877 |   0 |         1466 |
-| Recorded without throttling     |          140 |          140 |           162 |   — |            — |
-| Lantern, root                   |   68 (-95 %) |   68 (-95 %) |   255 (-71 %) |  36 |  153 (-90 %) |
-| Lantern, root+chains            |  987 (-33 %) |  987 (-33 %) |   987 (+13 %) |  45 | 1081 (-26 %) |
-| Lantern, root+chains+paint      | 1095 (-25 %) | 1095 (-25 %) |  1095 (+25 %) |   0 | 1095 (-25 %) |
-| Lantern, all-but-warm           | 1266 (-14 %) | 1266 (-14 %) |  1266 (+44 %) |   0 | 1266 (-14 %) |
-| Lantern, all                    |  666 (-55 %) |  666 (-55 %) |   666 (-24 %) |   0 |  666 (-55 %) |
-| Lantern, root+chains+paint+cold | 1866 (+27 %) | 1866 (+27 %) | 1866 (+113 %) |   0 | 1866 (+27 %) |
+| DevTools throttling             |         1465 |         1465 |           875 |   0 |         1465 |
+| Recorded without throttling     |          122 |          122 |           147 |   — |            — |
+| Lantern, root                   |   68 (-95 %) |   68 (-95 %) |   249 (-72 %) |  31 |  150 (-90 %) |
+| Lantern, root+chains            |  982 (-33 %) |  982 (-33 %) |   982 (+12 %) |  40 | 1072 (-27 %) |
+| Lantern, root+chains+paint      | 1086 (-26 %) | 1086 (-26 %) |  1086 (+24 %) |   0 | 1086 (-26 %) |
+| Lantern, all-but-warm           | 1251 (-15 %) | 1251 (-15 %) |  1251 (+43 %) |   0 | 1251 (-15 %) |
+| Lantern, all                    |  651 (-56 %) |  651 (-56 %) |   651 (-26 %) |   0 |  651 (-56 %) |
+| Lantern, root+chains+paint+cold | 1851 (+26 %) | 1851 (+26 %) | 1851 (+112 %) |   0 | 1851 (+26 %) |
 
 ## react.dev
 
@@ -41,14 +41,14 @@ Every configuration, over every run of every target. The tables per target below
 
 |                                 |         FCP |         LCP |           SI |          TBT |           TTI |
 | ------------------------------- | ----------: | ----------: | -----------: | -----------: | ------------: |
-| DevTools throttling             |         170 |         170 |           71 |           49 |          1159 |
-| Recorded without throttling     |          73 |          73 |           31 |            — |             — |
-| Lantern, root                   | 134 (-21 %) | 134 (-21 %) |  134 (+89 %) | 122 (+149 %) |   1266 (+9 %) |
-| Lantern, root+chains            | 134 (-21 %) | 134 (-21 %) |  134 (+89 %) | 122 (+149 %) |  1270 (+10 %) |
-| Lantern, root+chains+paint      |  167 (-2 %) |  167 (-2 %) | 238 (+235 %) | 122 (+149 %) |  1270 (+10 %) |
-| Lantern, all-but-warm           |  167 (-2 %) |  167 (-2 %) | 238 (+235 %) | 122 (+149 %) |  1270 (+10 %) |
-| Lantern, all                    |  167 (-2 %) |  167 (-2 %) | 178 (+150 %) | 122 (+149 %) |   816 (-30 %) |
-| Lantern, root+chains+paint+cold |  167 (-2 %) |  167 (-2 %) | 566 (+698 %) | 122 (+149 %) | 4154 (+259 %) |
+| DevTools throttling             |         170 |         170 |           71 |           52 |          1150 |
+| Recorded without throttling     |          61 |          61 |           26 |            — |             — |
+| Lantern, root                   |  97 (-43 %) |  97 (-43 %) |   97 (+37 %) | 129 (+148 %) |  1268 (+10 %) |
+| Lantern, root+chains            |  97 (-43 %) |  97 (-43 %) |   97 (+37 %) | 129 (+148 %) |  1272 (+11 %) |
+| Lantern, root+chains+paint      | 132 (-23 %) | 132 (-23 %) | 231 (+225 %) | 129 (+148 %) |  1272 (+11 %) |
+| Lantern, all-but-warm           | 132 (-23 %) | 132 (-23 %) | 231 (+225 %) | 129 (+148 %) |  1272 (+11 %) |
+| Lantern, all                    | 132 (-23 %) | 132 (-23 %) | 159 (+124 %) | 129 (+148 %) |   818 (-29 %) |
+| Lantern, root+chains+paint+cold | 132 (-23 %) | 132 (-23 %) | 557 (+685 %) | 129 (+148 %) | 4126 (+259 %) |
 
 ## svelte.dev
 
@@ -56,14 +56,14 @@ Every configuration, over every run of every target. The tables per target below
 
 |                                 |           FCP |           LCP |            SI |        TBT |           TTI |
 | ------------------------------- | ------------: | ------------: | ------------: | ---------: | ------------: |
-| DevTools throttling             |           634 |           634 |           435 |         22 |          2712 |
-| Recorded without throttling     |            87 |            87 |            74 |          — |             — |
-| Lantern, root                   |    49 (-92 %) |    49 (-92 %) |   124 (-72 %) | 10 (-55 %) |   584 (-78 %) |
-| Lantern, root+chains            |    54 (-91 %) |    54 (-91 %) |   254 (-42 %) | 10 (-55 %) |  1576 (-42 %) |
-| Lantern, root+chains+paint      |   806 (+27 %) |   806 (+27 %) |   806 (+85 %) | 10 (-55 %) |  1580 (-42 %) |
-| Lantern, all-but-warm           |  1000 (+58 %) |  1000 (+58 %) | 1000 (+130 %) | 10 (-55 %) |  1882 (-31 %) |
-| Lantern, all                    |   356 (-44 %) |   356 (-44 %) |   356 (-18 %) | 10 (-55 %) |  1237 (-54 %) |
-| Lantern, root+chains+paint+cold | 1600 (+152 %) | 1600 (+152 %) | 1600 (+268 %) | 10 (-55 %) | 6415 (+137 %) |
+| DevTools throttling             |           635 |           635 |           433 |         16 |          2702 |
+| Recorded without throttling     |            55 |            55 |            51 |          — |             — |
+| Lantern, root                   |    42 (-93 %) |    42 (-93 %) |    87 (-80 %) | 12 (-30 %) |   574 (-79 %) |
+| Lantern, root+chains            |   785 (+24 %) |   785 (+24 %) |   785 (+81 %) | 12 (-30 %) |  1567 (-42 %) |
+| Lantern, root+chains+paint      |   794 (+25 %) |   794 (+25 %) |   794 (+83 %) | 12 (-30 %) |  1570 (-42 %) |
+| Lantern, all-but-warm           |   976 (+54 %) |   976 (+54 %) |  976 (+125 %) | 12 (-30 %) |  1853 (-31 %) |
+| Lantern, all                    |   344 (-46 %) |   344 (-46 %) |   344 (-21 %) | 12 (-30 %) |  1221 (-55 %) |
+| Lantern, root+chains+paint+cold | 1576 (+148 %) | 1576 (+148 %) | 1576 (+264 %) | 12 (-30 %) | 6327 (+134 %) |
 
 ## vite.dev
 
@@ -71,11 +71,11 @@ Every configuration, over every run of every target. The tables per target below
 
 |                                 |         FCP |         LCP |           SI | TBT |         TTI |
 | ------------------------------- | ----------: | ----------: | -----------: | --: | ----------: |
-| DevTools throttling             |         276 |         276 |           38 |   0 |         276 |
-| Recorded without throttling     |          98 |          98 |           15 |   — |           — |
-| Lantern, root                   | 100 (-64 %) | 100 (-64 %) | 100 (+163 %) |   0 | 154 (-44 %) |
-| Lantern, root+chains            | 100 (-64 %) | 100 (-64 %) | 100 (+163 %) |   3 | 161 (-42 %) |
-| Lantern, root+chains+paint      | 161 (-42 %) | 161 (-42 %) | 161 (+323 %) |   0 | 163 (-41 %) |
-| Lantern, all-but-warm           | 161 (-42 %) | 161 (-42 %) | 161 (+323 %) |   0 | 163 (-41 %) |
-| Lantern, all                    | 161 (-42 %) | 161 (-42 %) | 161 (+323 %) |   0 | 163 (-41 %) |
-| Lantern, root+chains+paint+cold | 161 (-42 %) | 161 (-42 %) | 161 (+323 %) |   0 | 163 (-41 %) |
+| DevTools throttling             |         259 |         259 |           37 |   0 |         259 |
+| Recorded without throttling     |          96 |          96 |           14 |   — |           — |
+| Lantern, root                   |  99 (-62 %) |  99 (-62 %) |  99 (+167 %) |   0 | 139 (-46 %) |
+| Lantern, root+chains            |  99 (-62 %) |  99 (-62 %) |  99 (+167 %) |   0 |  99 (-62 %) |
+| Lantern, root+chains+paint      | 146 (-44 %) | 146 (-44 %) | 146 (+295 %) |   0 | 146 (-44 %) |
+| Lantern, all-but-warm           | 146 (-44 %) | 146 (-44 %) | 146 (+295 %) |   0 | 146 (-44 %) |
+| Lantern, all                    | 146 (-44 %) | 146 (-44 %) | 146 (+295 %) |   0 | 146 (-44 %) |
+| Lantern, root+chains+paint+cold | 146 (-44 %) | 146 (-44 %) | 146 (+295 %) |   0 | 146 (-44 %) |

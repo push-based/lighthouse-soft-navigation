@@ -17,11 +17,11 @@ scenarios and 4 public sites, 3 runs each. The error is the median of the absolu
 | Configuration                                   | Fixture FCP | Fixture LCP | Fixture within 20 % | Sites FCP | Sites LCP | Sites within 20 % |
 | ----------------------------------------------- | ----------: | ----------: | ------------------: | --------: | --------: | ----------------: |
 | Stock Lantern                                   |       error |       error |                 0 % |     error |     error |               0 % |
-| Root only (change 1)                            |       100 % |        42 % |                 6 % |      78 % |      78 % |               8 % |
-| Root and `fetch` chains (1, 3)                  |       100 % |        29 % |                13 % |      37 % |      37 % |               8 % |
-| Root, chains and paint graph (1, 3, 2)          |        13 % |        20 % |                60 % |      27 % |      27 % |              17 % |
-| The same, with the HTTP/2 rule (`all-but-warm`) |        13 % |        17 % |                67 % |      29 % |      29 % |              42 % |
-| Every change, warm connections included (`all`) |        13 % |        17 % |                67 % |      44 % |      44 % |              17 % |
+| Root only (change 1)                            |       100 % |        41 % |                 6 % |      78 % |      78 % |               0 % |
+| Root and `fetch` chains (1, 3)                  |       100 % |        29 % |                13 % |      41 % |      41 % |               0 % |
+| Root, chains and paint graph (1, 3, 2)          |        13 % |        21 % |                56 % |      28 % |      28 % |               0 % |
+| The same, with the HTTP/2 rule (`all-but-warm`) |        13 % |        17 % |                63 % |      26 % |      26 % |              17 % |
+| Every change, warm connections included (`all`) |        13 % |        17 % |                60 % |      44 % |      44 % |               0 % |
 
 "Within 20 %" is the share of FCP and LCP values within 20 % of DevTools throttling. Under `simulate`, the soft navigation step now gets a Performance score: the audits compute instead of erroring. The
 recordings were made with every change installed, and the values the step's audits reported are the ones
@@ -29,17 +29,17 @@ recordings were made with every change installed, and the values the step's audi
 
 ### What held
 
-- **Changes 1, 2 and 3 are needed together.** Without the root, the audits error, and with chains or the paint graph left out, the FCP is off by 55 % to 100 %. With all
-  three, the fixture's FCP is off by 13 % and its LCP by 17 %. Per fixture scenario, the FCP is within -27 % (`lazy-chunk`) to +38 % (`sequential-h2`) of DevTools throttling.
-- **The signal for `fetch` chains is there.** Every recording has the `v8::Debugger::AsyncTaskScheduled` flows, from 13
-  to 207 per soft navigation. In the fixture they link each task that sent a `fetch` to the task that continued after
-  it, and the chains take the fixture's LCP from 42 % to 29 % off before the paint graph is added.
+- **Changes 1, 2 and 3 are needed together.** Without the root, the audits error, and with chains or the paint graph left out, the FCP is off by 62 % to 100 %. With all
+  three, the fixture's FCP is off by 13 % and its LCP by 21 %. Per fixture scenario, the FCP is within -26 % (`lazy-chunk`) to +37 % (`sequential-h2`) of DevTools throttling.
+- **The signal for `fetch` chains is there.** Every recording has the `v8::Debugger::AsyncTaskScheduled` flows, linking 8
+  to 121 pairs of tasks per soft navigation. In the fixture they link each task that sent a `fetch` to the task that continued after
+  it, and the chains take the fixture's LCP from 41 % to 29 % off before the paint graph is added.
 - **The page load rule for the paint does not apply.** Lantern keeps the requests that would have blocked the parser.
   For a soft navigation the paint graph has to be the paint and what it depends on, plus every task that ran before
   it. The last part came from the real sites: react.dev and vite.dev had their data before the click, and their soft
-  navigation is script work that is not on the paint's path but kept the main thread busy. Without it, the sites' FCP is off by 98 %, and the fixture's is the same either way.
+  navigation is script work that is not on the paint's path but kept the main thread busy. Without it, the sites' FCP is off by 96 %, and the fixture's is the same either way.
 - **Pruning has to wait.** See [the changes](#the-changes): Lantern prunes short tasks before the new links could be
-  added. Not pruning at all (`all+short`) was tried and is worse: 47 % on the sites, because tasks that finished before
+  added. Not pruning at all (`all+short`) was tried and is worse: 49 % on the sites, because tasks that finished before
   the paint in the unthrottled recording pull in requests the paint did not wait for.
 
 ### What did not
@@ -47,13 +47,15 @@ recordings were made with every change installed, and the values the step's audi
 - **Change 4 moves Lantern away from the reference.** DevTools throttling adds 562.5 ms to every request, warm
   connection or not. Lantern charges a request on a warm connection one round trip, 150 ms, and the server's time. A
   soft navigation is mostly requests on warm connections, so the warmer Lantern's model, the further it is from DevTools
-  throttling: warm connections take the sites from 27 % to 60 %. A real network is closer to Lantern here, but Lighthouse
+  throttling: warm connections take the sites from 28 % to 60 %. A real network is closer to Lantern here, but Lighthouse
   validates Lantern against DevTools throttling ([its golden traces](https://github.com/GoogleChrome/lighthouse/tree/main/core/scripts/lantern/collect)),
   so that is the bar upstream.
 - **Charging every request as a new connection (`root+chains+paint+cold`) is no fix either.** It matches the fixture's
-  LCP best, 12 %, but overshoots the sites, 36 %, where requests that ran in parallel each pay a connection.
-- **The HTTP/2 rule is mixed.** It brings the fixture's HTTP/2 LCP from -31 % to -13 %, and takes svelte.dev, which is on
-  HTTP/2, from +27 % to +58 %.
+  LCP best, 13 %, but overshoots the sites that request their data at the click, where requests that ran in parallel
+  each pay a connection: angular.dev by 26 % and svelte.dev by 148 %. The sites' median stays at 28 % only because
+  react.dev and vite.dev come out the same with it.
+- **The HTTP/2 rule is mixed.** It brings the fixture's HTTP/2 LCP from -31 % to -13 % and angular.dev's, on HTTP/3, from
+  -26 % to -15 %, but takes svelte.dev, on HTTP/2, from +25 % to +54 %.
 - **On the fixture, Chrome did not reuse the page load's connection** for the first `fetch` over HTTP/1.1, with or without
   Lighthouse. Warm connections then change nothing, which is right: the change only trusts what Chrome reports.
 
@@ -83,11 +85,12 @@ Three things made early numbers wrong, and would make any re-run wrong:
 - Change 4 should not be proposed as it stands. Against DevTools throttling it makes the result worse. Whether Lantern or
   DevTools throttling models a warm connection better is a question for the Lighthouse team, and it affects page loads
   too.
-- 27 % to 29 % on four sites is not good enough to remove the override in lighthouse#17075 (change 7). The open points:
-  - vite.dev is 42 % too fast in every run: its soft navigation is script work, and Lantern's estimate of it is short.
-  - svelte.dev's estimate swings between runs, 53 ms in one and about 1000 ms in the others, against a steady 630 ms
-    under DevTools throttling. The likely cause is prefetching: whether the data arrived before the click in the
-    unthrottled recording.
+- 26 % to 28 % on four sites is not good enough to remove the override in lighthouse#17075 (change 7). The open points:
+  - vite.dev is 44 % too fast in every run: its soft navigation is script work, and Lantern's estimate of it is short.
+  - svelte.dev is 25 % too slow, and 54 % with the HTTP/2 rule. In an earlier set of recordings its estimate swung
+    between runs, from 53 ms to about 1000 ms, against a steady 630 ms under DevTools throttling, likely depending on
+    whether prefetched data arrived before the click. In the committed set it varies less, 785 to 810 ms
+    without the HTTP/2 rule, but one site across two sets of recordings is not enough to rule the swing out.
   - Four sites and one fixture, on one machine. Lighthouse's golden set has over a hundred sites; soft navigations
     would need a set of their own (change 6).
 
@@ -98,16 +101,16 @@ Three things made early numbers wrong, and would make any re-run wrong:
 The changes replace Lantern functions at runtime, in the Lantern that Lighthouse imports, so that Lighthouse's own
 computed artifacts and audits use them. Each one can be switched on its own (`src/lantern/install.mjs`):
 
-| Flag              | Change in the doc | What it does                                                                                                                                                                                                                   | Upstream file                                                                                          |
-| ----------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `root`            | 1                 | Roots the graph at the task that was running at `SoftNavigationStart`. Requests and tasks from before it are left out, and there is no main document.                                                                          | `graph/PageDependencyGraph.ts` (`createGraph`, `linkNetworkNodes`)                                     |
-| `fetchChains`     | 3                 | A task that continues after an async task depends on the task that scheduled it, and on the requests that task sent before scheduling it and that had finished. The link comes from `v8::Debugger::AsyncTaskScheduled` flows.  | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
-| `taskRequests`    | 3                 | A request of any type depends on the task that sent it. Lantern only links `fetch`, XHR and scripts, which leaves an inserted image hanging off the root.                                                                      | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
-| `paintGraph`      | 2                 | A task that paints depends on the last task that changed the view. The FCP and LCP graphs are the last paint before the metric, with everything it depends on, every task that ran before it, and finished images for the LCP. | `graph/PageDependencyGraph.ts`, `metrics/FirstContentfulPaint.ts`, `metrics/LargestContentfulPaint.ts` |
-| `warmConnections` | 4                 | Origins whose first request in the step reused a connection, by Chrome's `connectionReused`, start with warm connections.                                                                                                      | `simulation/ConnectionPool.ts`, `simulation/Simulator.ts`                                              |
-| `h2Ttfb`          | 4                 | A request on a warm HTTP/2 connection pays a time to first byte unless another request to the origin was in flight when it was sent ([lighthouse#15897](https://github.com/GoogleChrome/lighthouse/issues/15897)).             | `simulation/TCPConnection.ts`                                                                          |
-| `keepShortTasks`  | tried             | Tasks under 10 ms stay in the graph instead of being pruned.                                                                                                                                                                   | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
-| `coldRequests`    | for comparison    | Every request is simulated as the first on a new connection, DNS lookup included. That is close to what DevTools throttling does.                                                                                              | —                                                                                                      |
+| Flag              | Change in the doc | What it does                                                                                                                                                                                                                                                                                                                                          | Upstream file                                                                                          |
+| ----------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `root`            | 1                 | Roots the graph at the first task still running at `SoftNavigationStart`, the time of the input. That is usually a task of a few µs, not the click's own task, which starts up to 2 ms later and is usually pruned, so what it started then depends on the root. Requests and tasks from before the root are left out, and there is no main document. | `graph/PageDependencyGraph.ts` (`createGraph`, `linkNetworkNodes`)                                     |
+| `fetchChains`     | 3                 | A task that continues after an async task depends on the task that scheduled it, and on the requests that task sent before scheduling it and that had finished. The link comes from `v8::Debugger::AsyncTaskScheduled` flows.                                                                                                                         | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
+| `taskRequests`    | 3                 | A request of any type depends on the task that sent it. Lantern only links `fetch`, XHR and scripts, which leaves an inserted image hanging off the root.                                                                                                                                                                                             | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
+| `paintGraph`      | 2                 | A task that paints depends on the last task that changed the view. The FCP and LCP graphs are the last paint before the metric, with everything it depends on, every task that ran before it, and finished images for the LCP.                                                                                                                        | `graph/PageDependencyGraph.ts`, `metrics/FirstContentfulPaint.ts`, `metrics/LargestContentfulPaint.ts` |
+| `warmConnections` | 4                 | Origins whose first request in the step reused a connection, by Chrome's `connectionReused`, start with warm connections.                                                                                                                                                                                                                             | `simulation/ConnectionPool.ts`, `simulation/Simulator.ts`                                              |
+| `h2Ttfb`          | 4                 | A request on a warm HTTP/2 connection pays a time to first byte unless another request to the origin was in flight when it was sent ([lighthouse#15897](https://github.com/GoogleChrome/lighthouse/issues/15897)).                                                                                                                                    | `simulation/TCPConnection.ts`                                                                          |
+| `keepShortTasks`  | tried             | Tasks under 10 ms stay in the graph instead of being pruned.                                                                                                                                                                                                                                                                                          | `graph/PageDependencyGraph.ts` (`linkCPUNodes`)                                                        |
+| `coldRequests`    | for comparison    | Every request is simulated as the first on a new connection, DNS lookup included. That is close to what DevTools throttling does.                                                                                                                                                                                                                     | —                                                                                                      |
 
 Lighthouse change 5, passing the soft navigation to Lantern, is stood in for: the replaced `createGraph` finds the
 first `SoftNavigationStart` among the main thread events itself. The trace category change 3 reads,
