@@ -17,15 +17,18 @@ const SNIPPET = `import { startFlow } from 'lighthouse';
 import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
 // \`page\` is a Puppeteer page.
-const flow = await startFlow(page, { config: softNavigationConfig() });
+const flow = await startFlow(page, {
+  config: softNavigationConfig({
+    extends: 'lighthouse:default',
+    settings: { throttlingMethod: 'devtools' },
+  }),
+});
 
 // Load the page first: a soft navigation starts from a loaded page.
 await flow.navigate('https://example.com');
 
 // A click that only changes the route is now a navigation step too.
-await flow.navigate(() => page.click('a.product-link'), {
-  throttlingMethod: 'devtools',
-});
+await flow.navigate(() => page.click('a.product-link'));
 `;
 
 @Component({

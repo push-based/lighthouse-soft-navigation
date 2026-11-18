@@ -6,9 +6,9 @@ The package can't switch the method for you. A flow has one config for all steps
 
 What Lighthouse would have to change for `simulate` to work is in [Simulated throttling for soft navigations](https://github.com/push-based/lighthouse-soft-navigation/blob/main/docs/simulated-throttling.md).
 
-## Per step or per flow
+## Per flow or per step
 
-Set it on each soft navigation step, as the setup guides for [Lighthouse](/docs/getting-started/lighthouse) and [user-flow](/docs/getting-started/user-flow) do, or once for the whole flow:
+Set it once for the whole flow, as the setup guides for [Lighthouse](/docs/getting-started/lighthouse) and [user-flow](/docs/getting-started/user-flow) do:
 
 ```js
 const flow = await startFlow(page, {
@@ -21,4 +21,17 @@ const flow = await startFlow(page, {
 
 With user-flow, the same config goes in `flowOptions.config`. To set it for every flow of a project, see [Settings for every flow](/docs/getting-started/user-flow#settings-for-every-flow).
 
-The flow-wide setting applies to page loads too. Those then take longer, vary more between runs and no longer compare with PageSpeed Insights or a default Lighthouse run. Set it per step when page load numbers have to compare with those.
+The flow-wide setting applies to page loads too. Those then take longer, vary more between runs and no longer compare with PageSpeed Insights or a default Lighthouse run. When page load numbers have to compare with those, leave the config on the default and set it on each soft navigation step instead:
+
+```js
+const flow = await startFlow(page, { config: softNavigationConfig() });
+
+await flow.navigate('https://example.com');
+await flow.navigate(() => page.click('a.product-link'), {
+  throttlingMethod: 'devtools',
+});
+
+await flow.startNavigation({ throttlingMethod: 'devtools' });
+await page.click('a.checkout-link');
+await flow.endNavigation();
+```
