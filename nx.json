@@ -53,15 +53,24 @@
   "analytics": false,
   "release": {
     "projects": ["lighthouse-soft-navigation"],
+    "releaseTag": {
+      "pattern": "v{version}"
+    },
     "version": {
       "preVersionCommand": "pnpm nx run-many -t build -p lighthouse-soft-navigation",
       "conventionalCommits": true
     },
     "changelog": {
       "workspaceChangelog": false,
-      "projectChangelogs": true
+      "projectChangelogs": {
+        "createRelease": "github"
+      }
     },
     "git": {
+      "commit": true,
+      "tag": true,
+      "push": true,
+      "pushRemote": "origin",
       "commitMessage": "chore(release): publish {version}"
     }
   },
