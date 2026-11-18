@@ -56,6 +56,7 @@ export default async function setup(project: TestProject) {
       stageChanges: false,
       gitCommit: false,
       gitTag: false,
+      gitPush: false,
       firstRelease: true,
       versionActionsOptionsOverrides: { skipLockFileUpdate: true },
     });

@@ -1,0 +1,42 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+# Configured as an npm trusted publisher (OIDC), so no npm token is needed.
+# https://docs.npmjs.com/trusted-publishers
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish packages
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Installs the pnpm version of the packageManager field
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      # nx-release-publish does not depend on build, and dist is not committed.
+      - run: pnpm nx run-many -t build -p lighthouse-soft-navigation
+
+      - name: Publish packages to npm
+        run: pnpm nx release publish
