@@ -28,7 +28,7 @@ Markdown extras:
 
 - Fenced code blocks are highlighted. Add a file name with ` ```js title="flow.mjs" `.
 - `> [!TIP]`, `> [!NOTE]`, `> [!IMPORTANT]` and `> [!WARNING]` block quotes render as callouts.
-- Links that start with `/docs/` are in-app links and are rewritten for the base href.
+- Links that start with `/docs/` are in-app links and are rewritten for the base href. Other links that start with `/` point to files in `public`, are rewritten for the base href and open in a new tab.
 - Images live in `public/images` and are referenced as `images/<file>`.
 - `<!-- diagram: name -->` draws one of the inline diagrams from `src/app/docs/diagrams.ts`, and `<!-- cta -->` adds the install call to action.
 
@@ -39,6 +39,10 @@ The site follows the system colour scheme and offers a toggle in the header; the
 `node packages/docs/scripts/og-image.mjs` renders `public/og-image.png` from an HTML version of the landing page hero. Run it after changing the hero's look.
 
 The mark in `public/images/mark.svg`, the favicon and the touch icon are the user-flow ones.
+
+## Example report
+
+`node packages/docs/scripts/example-report.mjs` renders `public/examples/soft-navigation-flow.html`, the flow report linked from the results guide, by measuring the coffee-cart demo app. Build the package first with `pnpm nx build lighthouse-soft-navigation`. Run it after a change to what the package reports.
 
 ## Deploy
 

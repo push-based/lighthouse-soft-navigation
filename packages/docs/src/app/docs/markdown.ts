@@ -398,16 +398,22 @@ export function renderMarkdown(
     return `<div class="options">${items.join('')}</div>\n`;
   };
 
-  /** Resolves an in-app link against the base href and marks it for the router. */
+  /**
+   * Resolves a site link against the base href. A `/docs/` link is marked for the router; any
+   * other site path, such as the example report, is a file outside the app and opens in a new tab.
+   */
   const linkTarget = (href: string) => {
     const external = /^https?:\/\//.test(href);
-    const internal = href.startsWith('/');
+    const site = href.startsWith('/');
+    const route = href.startsWith('/docs/');
     return {
       external,
       attrs: [
-        `href="${internal ? baseHref + href : href}"`,
-        internal ? `data-internal="${href}"` : '',
-        external ? 'target="_blank" rel="noopener noreferrer"' : '',
+        `href="${site ? baseHref + href : href}"`,
+        route ? `data-internal="${href}"` : '',
+        external || (site && !route)
+          ? 'target="_blank" rel="noopener noreferrer"'
+          : '',
       ]
         .filter(Boolean)
         .join(' '),
