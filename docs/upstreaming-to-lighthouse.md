@@ -40,14 +40,16 @@ reset before the step. Chrome 149 or newer is required.
 With the package, the same steps are written without the setting and with observed throttling:
 
 ```js
-const flow = await startFlow(page, { config: softNavigationConfig() });
+const flow = await startFlow(page, {
+  config: softNavigationConfig({
+    extends: 'lighthouse:default',
+    settings: { throttlingMethod: 'devtools' },
+  }),
+});
 
-await flow.navigate(
-  async () => {
-    await page.click('a.product-link');
-  },
-  { throttlingMethod: 'devtools' },
-);
+await flow.navigate(async () => {
+  await page.click('a.product-link');
+});
 ```
 
 ### Why the package cannot use the same flag
@@ -58,7 +60,7 @@ await flow.navigate(
 
 The package therefore recognises a soft navigation instead of being told about one: the main frame navigates
 within the document, and no document starts loading. For the same reason it cannot switch simulated
-throttling to DevTools throttling for the step, which is why the step passes `throttlingMethod` itself.
+throttling to DevTools throttling for the step, which is why the flow sets `throttlingMethod` itself.
 What simulated throttling would need to work for a soft navigation is in
 [Simulated throttling for soft navigations](simulated-throttling.md).
 
@@ -74,7 +76,7 @@ ask for it.
 | **Gathering**                   | `SoftNavigation` gatherer: on a main frame `Page.navigatedWithinDocument` it emits `Page.frameNavigated`, `Page.domContentEventFired` and `Page.loadEventFired` on the Lighthouse session, so `gotoURL` and its wait conditions complete unchanged | Navigation runner waits on `['softNavigation']` instead of `load`/`fcp`; `waitForSoftNavigation` waits for `Page.navigatedWithinDocument` plus network and CPU quiet; `gotoURL` uses the in-document URL as requested/main document URL | `core/gather/navigation-runner.js`, `core/gather/driver/navigation.js`, `core/gather/driver/wait-for-condition.js`                                        |
 | **Waiting for the paint**       | The gatherer emits the `firstContentfulPaint` lifecycle event once Chrome reports the `soft-navigation` performance entry, so `pauseAfterFcpMs` counts from the soft navigation's FCP                                                              | **Not in #17075**, which only waits for network and CPU quiet. Needed for TTI and TBT, which require the trace to continue 5 s past FCP                                                                                                 | `core/gather/driver/wait-for-condition.js`                                                                                                                |
 | **Requestor guard**             | Not needed: a URL requestor always loads a document                                                                                                                                                                                                | Throw when `softNavigation` is combined with a URL requestor                                                                                                                                                                            | `core/gather/navigation-runner.js`                                                                                                                        |
-| **Settings overrides**          | None possible. A flow already skips `about:blank` and the storage reset for a callback; the step passes `throttlingMethod: 'devtools'`                                                                                                             | For soft navigations: `skipAboutBlank`, `disableStorageReset`, and `simulate` → `devtools` throttling (no document request to build a graph from)                                                                                       | `core/config/config.js` (`overrideSettingsForGatherMode`)                                                                                                 |
+| **Settings overrides**          | None possible. A flow already skips `about:blank` and the storage reset for a callback; the flow sets `throttlingMethod: 'devtools'`                                                                                                               | For soft navigations: `skipAboutBlank`, `disableStorageReset`, and `simulate` → `devtools` throttling (no document request to build a graph from)                                                                                       | `core/config/config.js` (`overrideSettingsForGatherMode`)                                                                                                 |
 | **Config filtering**            | None. Every navigation audit runs; the ones that cannot apply report `notApplicable`                                                                                                                                                               | `filterConfigForSoftNavigation`: timespan artifacts and audits, plus navigation-only `first-contentful-paint` and `largest-contentful-paint`                                                                                            | `core/config/filters.js`, `core/config/config.js`                                                                                                         |
 | **Time origin**                 | `Trace` gatherer (extends the stock one): adds the time origin marker at `SoftNavigationStart` to the trace of a soft navigation                                                                                                                   | New `softNavigationStart` time-origin method; a `clock_sync` marker recorded at trace start excludes soft navigations that happened before the step                                                                                     | `core/lib/tracehouse/trace-processor.js`, `core/gather/gatherers/trace.js`                                                                                |
 | **FCP / LCP**                   | Same gatherer: adds `firstContentfulPaint` and `largestContentfulPaint::Candidate` events derived from `SoftNavigationStart` and `largestContentfulPaint::CandidateForSoftNavigation`. The **stock** audits compute them                           | `processSoftNavigation` builds a regular `ProcessedNavigation`, so the **stock** FCP/LCP audits work unchanged                                                                                                                          | `core/lib/tracehouse/trace-processor.js`                                                                                                                  |

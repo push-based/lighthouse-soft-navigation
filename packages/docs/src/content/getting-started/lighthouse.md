@@ -8,7 +8,7 @@ npm install --save-dev @push-based/lighthouse-soft-navigation lighthouse puppete
 
 ## Write the flow
 
-Pass `softNavigationConfig()` to `startFlow`, load the page, then trigger the route change in a navigation step. The page load has to come first: a soft navigation starts from a page that is already loaded.
+Pass `softNavigationConfig()` to `startFlow` with DevTools throttling, load the page, then trigger the route change in a navigation step. The page load has to come first: a soft navigation starts from a page that is already loaded.
 
 ```js title="flow.mjs"
 import { writeFileSync } from 'node:fs';
@@ -18,18 +18,21 @@ import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
-const flow = await startFlow(page, { config: softNavigationConfig() });
+const flow = await startFlow(page, {
+  config: softNavigationConfig({
+    extends: 'lighthouse:default',
+    settings: { throttlingMethod: 'devtools' },
+  }),
+});
 
-// Load the page first. This step is measured by stock Lighthouse.
+// Load the page first.
 await flow.navigate('https://example.com');
 
 // A soft navigation, from the loaded page.
-await flow.navigate(() => page.click('a.product-link'), {
-  throttlingMethod: 'devtools',
-});
+await flow.navigate(() => page.click('a.product-link'));
 
 // The same with startNavigation/endNavigation.
-await flow.startNavigation({ throttlingMethod: 'devtools' });
+await flow.startNavigation();
 await page.click('a.checkout-link');
 await flow.endNavigation();
 
@@ -37,7 +40,7 @@ writeFileSync('flow.report.html', await flow.generateReport());
 await browser.close();
 ```
 
-There is no flag. A step is a soft navigation when the main frame navigates within the document and no document starts loading. Every soft navigation step needs `throttlingMethod: 'devtools'` or `'provided'`; see [Throttling](/docs/guides/throttling).
+There is no flag. A step is a soft navigation when the main frame navigates within the document and no document starts loading. A soft navigation needs `throttlingMethod: 'devtools'` or `'provided'`, so the flow sets it once for every step. To keep page loads on Lighthouse's default, set it per step instead; see [Throttling](/docs/guides/throttling).
 
 `softNavigationConfig(config?)` takes any Lighthouse config, including `desktopConfig` and configs with `extends: 'lighthouse:default'`.
 

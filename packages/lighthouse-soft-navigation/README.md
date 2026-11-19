@@ -20,28 +20,30 @@ Requires Lighthouse 13.6 and Chrome 149 or newer.
 import { startFlow } from 'lighthouse';
 import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 
-const flow = await startFlow(page, { config: softNavigationConfig() });
+const flow = await startFlow(page, {
+  config: softNavigationConfig({
+    extends: 'lighthouse:default',
+    settings: { throttlingMethod: 'devtools' },
+  }),
+});
 
-// A page load, measured by stock Lighthouse.
+// A page load.
 await flow.navigate('https://example.com');
 
 // A soft navigation.
-await flow.navigate(
-  async () => {
-    await page.click('a.product-link');
-  },
-  { throttlingMethod: 'devtools' },
-);
+await flow.navigate(async () => {
+  await page.click('a.product-link');
+});
 
 // The same with startNavigation/endNavigation.
-await flow.startNavigation({ throttlingMethod: 'devtools' });
+await flow.startNavigation();
 await page.click('a.checkout-link');
 await flow.endNavigation();
 
 const result = await flow.createFlowResult();
 ```
 
-To set the throttling method once for the whole flow instead of on each step, see [Throttling](#throttling).
+A soft navigation can't use Lighthouse's default throttling, so the flow sets `throttlingMethod` once for every step. To keep page loads on the default, set it on each soft navigation step instead; see [Throttling](#throttling).
 
 `softNavigationConfig(config?)` takes any Lighthouse config, including `desktopConfig` and configs with `extends: 'lighthouse:default'`. Without an argument it uses the default config. The config it returns has only the settings that were passed in; Lighthouse fills in the defaults, so settings from elsewhere, such as the settings of a user-flow project, still apply.
 
@@ -63,25 +65,27 @@ Lighthouse's default, `simulate`, loads the page without throttling and then est
 
 The package can't make that switch for you. A flow has one config for all of its steps, and the package only recognises a soft navigation while the step runs, after its throttling method is set. The Lighthouse change would switch it for soft navigations; see [Upstreaming to Lighthouse](../../docs/upstreaming-to-lighthouse.md#why-the-package-cannot-use-the-same-flag). What `simulate` itself would need to work is in [Simulated throttling for soft navigations](../../docs/simulated-throttling.md).
 
-Set it on each soft navigation step, as in [Usage](#usage), or once for the whole flow:
+Set it once for the whole flow, as in [Usage](#usage), or on each soft navigation step:
 
 ```js
-const flow = await startFlow(page, {
-  config: softNavigationConfig({
-    extends: 'lighthouse:default',
-    settings: { throttlingMethod: 'devtools' },
-  }),
-});
+const flow = await startFlow(page, { config: softNavigationConfig() });
 
 await flow.navigate('https://example.com');
-await flow.navigate(async () => {
-  await page.click('a.product-link');
-});
+await flow.navigate(
+  async () => {
+    await page.click('a.product-link');
+  },
+  { throttlingMethod: 'devtools' },
+);
+
+await flow.startNavigation({ throttlingMethod: 'devtools' });
+await page.click('a.checkout-link');
+await flow.endNavigation();
 ```
 
 The setting for the whole flow applies to page loads too. With `devtools` throttling, a page load is actually slowed down, so the flow takes longer, and its numbers vary more between runs. They also no longer compare with PageSpeed Insights or a default Lighthouse run, which both use `simulate`.
 
-Use the setting on each step when page load numbers have to compare with those. Use the setting for the whole flow when every step should be measured the same way.
+Use the setting for the whole flow when every step should be measured the same way. Use the setting on each step when page load numbers have to compare with PageSpeed Insights or a default Lighthouse run.
 
 With any throttling method but `simulate`, Lighthouse also waits longer before it ends a step: at least 5.25 s instead of 1 s after FCP and after load, and for the network and the CPU to go quiet.
 
@@ -116,21 +120,25 @@ The gatherers of this package extend the stock gatherers of the Lighthouse they 
 import { softNavigationConfig } from '@push-based/lighthouse-soft-navigation';
 import type { UserFlowProvider } from '@push-based/user-flow';
 
-const observed = { throttlingMethod: 'devtools' } as const;
-
 export default {
-  flowOptions: { name: 'Checkout', config: softNavigationConfig() },
+  flowOptions: {
+    name: 'Checkout',
+    config: softNavigationConfig({
+      extends: 'lighthouse:default',
+      settings: { throttlingMethod: 'devtools' },
+    }),
+  },
   interactions: async ({ flow, page, collectOptions }) => {
-    // A page load, measured by stock Lighthouse.
+    // A page load.
     await flow.navigate(collectOptions.url);
 
     // A soft navigation.
     await flow.navigate(async () => {
       await page.click('a.product-link');
-    }, observed);
+    });
 
     // The same with startNavigation/endNavigation.
-    await flow.startNavigation(observed);
+    await flow.startNavigation();
     await page.click('a.checkout-link');
     await flow.endNavigation();
   },
@@ -142,7 +150,7 @@ npx user-flow collect --url https://example.com --ufPath ./user-flows
 ```
 
 - The config goes in `flowOptions.config`. `collect.config` and `collect.configPath` in `.user-flowrc.json` and `--configPath` take JSON, which cannot hold the gatherer and audit classes of the package.
-- The steps are the same as in [Usage](#usage). A soft navigation step passes `throttlingMethod`; see [Throttling](#throttling).
+- The config and the steps are the same as in [Usage](#usage). The throttling method can also go in the settings of the project; see [Settings](#settings) and [Throttling](#throttling).
 
 ### Settings
 
@@ -172,7 +180,7 @@ config: softNavigationConfig({
 
 ### Recordings
 
-A Chrome DevTools recording replayed with `createUserFlowRunner` measures a soft navigation with `startNavigation` and `endNavigation` steps. The throttling method goes in `stepOptions`:
+A Chrome DevTools recording replayed with `createUserFlowRunner` measures a soft navigation with `startNavigation` and `endNavigation` steps. The throttling method comes from the config of the flow or the project, as above. To set it on the step instead, it goes in `stepOptions`:
 
 ```json
 {
