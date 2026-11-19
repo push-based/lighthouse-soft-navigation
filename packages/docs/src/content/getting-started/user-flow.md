@@ -68,7 +68,7 @@ There is no flag. A step is a soft navigation when the main frame navigates with
 npx user-flow collect
 ```
 
-user-flow writes the report to `./measures` and opens it. [Reading the result](/docs/guides/results) explains what a soft navigation step looks like in it.
+user-flow writes the report to `./measures` and opens it. [Telling soft navigations apart](/docs/guides/results) shows how to spot a soft navigation step in it.
 
 ## Settings for every flow
 
