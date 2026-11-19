@@ -68,9 +68,9 @@ export const DOCS_NAV: DocSection[] = [
     pages: [
       {
         slug: 'results',
-        title: 'Reading the result',
+        title: 'Telling soft navigations apart',
         description:
-          'What a soft navigation step looks like in a report, and how to tell it from a page load.',
+          'How to tell a soft navigation step from a page load, in the HTML report and in code.',
         load: md(() => import('../../content/guides/results.md')),
       },
       {

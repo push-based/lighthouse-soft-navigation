@@ -50,4 +50,4 @@ There is no flag. A step is a soft navigation when the main frame navigates with
 node flow.mjs
 ```
 
-Open `flow.report.html`. [Reading the result](/docs/guides/results) explains what a soft navigation step looks like in it.
+Open `flow.report.html`. [Telling soft navigations apart](/docs/guides/results) shows how to spot a soft navigation step in it.
