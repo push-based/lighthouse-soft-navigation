@@ -8,7 +8,7 @@ The reports of Lighthouse and of user-flow show a soft navigation step like a pa
 - **Audits of the document response**, like `server-response-time` or `redirects`, are not applicable. The step has no document request, so this is expected.
 - **Run warnings** at the top of the step flag a run that went wrong: no soft navigation reported, more than one, or simulated throttling. [Limits and troubleshooting](/docs/guides/limits) covers each.
 
-The [example report](/examples/soft-navigation-flow.html) measures the coffee-cart demo app. It loads the menu, opens the cart and the GitHub page with a click, and then loads the cart as a page. The cart appears twice, once as a soft navigation and once as a page load. Its soft navigation paints in about 20 ms, because the app switches routes without fetching anything, so the report shows 0.0 s.
+The [example report](/examples/soft-navigation-flow.html) measures a small single page app. It loads the home page, opens the products and home routes with a click, and then loads products as a page. Each route paints its heading first and fetches its text after, so LCP comes after FCP. Products appears twice, once as a soft navigation and once as a page load.
 
 ## In code
 

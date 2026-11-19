@@ -42,7 +42,7 @@ The mark in `public/images/mark.svg`, the favicon and the touch icon are the use
 
 ## Example report
 
-`node packages/docs/scripts/example-report.mjs` renders `public/examples/soft-navigation-flow.html`, the flow report linked from the results guide, by measuring the coffee-cart demo app. Build the package first with `pnpm nx build lighthouse-soft-navigation`. Run it after a change to what the package reports.
+`node packages/docs/scripts/example-report.mjs` renders `public/examples/soft-navigation-flow.html`, the flow report linked from the results guide, by measuring the single page app of the e2e fixtures. Build the package first with `pnpm nx build lighthouse-soft-navigation`. Run it after a change to what the package reports.
 
 ## Deploy
 
