@@ -4,7 +4,7 @@ Measure soft navigations as navigation steps of a Lighthouse user flow, on stock
 
 **[Documentation](https://push-based.github.io/lighthouse-soft-navigation/)**
 
-The goal is to land this in Lighthouse itself; see [Upstreaming to Lighthouse](docs/upstreaming-to-lighthouse.md) for how each part maps to a Lighthouse change.
+The goal is to land this in Lighthouse itself. The upstream implementation is [GoogleChrome/lighthouse#17075](https://github.com/GoogleChrome/lighthouse/pull/17075), which behaves the same as this package; see [Upstreaming to Lighthouse](docs/upstreaming-to-lighthouse.md) for how each part maps to a Lighthouse change.
 
 | Project                                                                         | Description                                                                                                                                       |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
