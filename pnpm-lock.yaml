@@ -122,6 +122,12 @@ importers:
 
   packages/lighthouse-soft-navigation-e2e: {}
 
+  packages/simulated-throttling-spike:
+    dependencies:
+      '@push-based/lighthouse-soft-navigation':
+        specifier: workspace:*
+        version: link:../lighthouse-soft-navigation
+
 packages:
 
   '@ampproject/remapping@2.3.0':
